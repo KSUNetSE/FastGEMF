@@ -1,0 +1,66 @@
+compartments:
+- S
+- A
+- I
+edge_transitions:
+- from_state: S
+  inducer: I
+  name: infection
+  network_layer: contact_layer
+  rate: beta1
+  to_state: I
+  value: 0.1
+- from_state: A
+  inducer: I
+  name: infection
+  network_layer: contact_layer
+  rate: beta2
+  to_state: I
+  value: 0.05
+- from_state: S
+  inducer: I
+  name: Awareness
+  network_layer: contact_layer
+  rate: kappa1
+  to_state: A
+  value: 0.1
+- from_state: S
+  inducer: A
+  name: Awareness
+  network_layer: contact_layer
+  rate: kappa1
+  to_state: A
+  value: 0.1
+- from_state: S
+  inducer: A
+  name: Awareness
+  network_layer: information_layer
+  rate: kappa2
+  to_state: A
+  value: 0.3
+initial_conditions:
+  percentage_infected: 0.01
+name: SAIS Model
+network_layers:
+  contact_layer: G_5k.npz
+  information_layer: G_5k.npz
+node_transitions:
+- from_state: I
+  name: recovery
+  rate: delta1
+  to_state: S
+  value: 0.3
+- from_state: A
+  name: ignorance
+  rate: delta2
+  to_state: S
+  value: 0.5
+parameters:
+  beta1: 0.1
+  beta2: 0.05
+  delta1: 0.3
+  delta2: 0.5
+  kappa1: 0.1
+  kappa2: 0.3
+stop_conditions:
+  events: 20000

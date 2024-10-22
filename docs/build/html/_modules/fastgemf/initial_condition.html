@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fastgemf.initial_condition &mdash; FastGEMF v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fa47ad08"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FastGEMF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FastGEMF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fastgemf.initial_condition</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fastgemf.initial_condition</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<div class="viewcode-block" id="initial_condition_func">
+<a class="viewcode-back" href="../../index.html#fastgemf.initial_condition.initial_condition_func">[docs]</a>
+<span class="k">def</span> <span class="nf">initial_condition_func</span><span class="p">(</span><span class="n">networks</span><span class="p">,</span> <span class="n">inst</span><span class="p">,</span> <span class="n">initial_condition</span><span class="p">,</span><span class="n">counter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates the initial conditions for nodes in the network based on the specified method in `initial_condition`.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    networks : Network</span>
+<span class="sd">        The network object that defines the structure of the network layers.</span>
+
+<span class="sd">    inst : ModelConfiguration</span>
+<span class="sd">        The ModelConfiguration instance that defines the compartments and transitions.</span>
+
+<span class="sd">    initial_condition : dict</span>
+<span class="sd">        A dictionary specifying the method for initializing node states. Methods for the SIS model include:</span>
+<span class="sd">        - &#39;default_percentage&#39;: {} </span>
+<span class="sd">        Randomly assigns 10 percent of the population to the inducing state (e.g., 10 percent infected) and the remaining 90 percent equally and randomly to other states (e.g., 90 percent susceptible).</span>
+<span class="sd">        - &#39;percentage&#39;: {&#39;I&#39;: 5, &#39;S&#39;: 95} </span>
+<span class="sd">        User-defined percentages for each compartment, assigning nodes randomly to states based on these percentages (e.g., 5 percent infected, 95 percent susceptible).</span>
+<span class="sd">        - &#39;hubs_number&#39;: {&#39;I&#39;: 10, &#39;S&#39;: 10} </span>
+<span class="sd">        User-defined number of hubs (nodes with the most connections) to be assigned to specific states.</span>
+<span class="sd">        - &#39;exact&#39;: x0</span>
+<span class="sd">        Directly sets the initial state from an existing array `x0`.</span>
+
+<span class="sd">    counter : int</span>
+<span class="sd">        A counter to track how many times the function has been called, used to prevent infinite recursion.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    x0 : np.ndarray</span>
+<span class="sd">        An N x M array representing the initial state of each node in the network, where each element is the </span>
+<span class="sd">        compartment/state index for that node.</span>
+<span class="sd">    </span>
+<span class="sd">    Description:</span>
+<span class="sd">    ------------</span>
+<span class="sd">    This function assigns initial states to nodes based on the selected method:</span>
+<span class="sd">    - &#39;default_percentage&#39;: Randomly assigns 10% of the nodes to inducer compartments and 90% to others.</span>
+<span class="sd">    - &#39;percentage&#39;: Distributes nodes into compartments according to user-defined percentages.</span>
+<span class="sd">    - &#39;hubs_number&#39;: Places a fixed number of nodes into specific compartments, targeting nodes with the highest degree.</span>
+<span class="sd">    - &#39;exact&#39;: Uses an existing array `x0` to directly set the initial state of each node.</span>
+
+<span class="sd">    If an invalid method is provided, the function defaults to the &#39;default_percentage&#39; method.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">    -------</span>
+<span class="sd">    ValueError:</span>
+<span class="sd">        Raised if the percentages provided in the &#39;percentage&#39; method do not sum to 1 or 100.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">method</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">initial_condition</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;default_percentage&#39;</span><span class="p">:</span> 
+        <span class="n">N</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">others</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">compartments</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">J</span><span class="p">]</span>  <span class="c1"># Typo fixed here: &#39;compartments&#39;</span>
+        <span class="n">percentage_inducer</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="n">percentage_others</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="n">NJ</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">percentage_inducer</span><span class="p">)</span>
+        <span class="n">NO</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">percentage_others</span><span class="p">)</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">NJ</span> <span class="o">&gt;</span> <span class="n">N</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;Oops! Initial infection is more than the total population&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+            <span class="n">nj</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[:</span><span class="n">NJ</span><span class="p">]</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">NJ</span><span class="p">:</span><span class="n">NJ</span> <span class="o">+</span> <span class="n">NO</span><span class="p">]</span>  <span class="c1"># Remaining nodes for &#39;others&#39;</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NJ</span><span class="p">,</span> <span class="n">NJ</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">J</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">NJ</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">J</span><span class="p">)):</span>
+                <span class="n">x0</span><span class="p">[</span><span class="n">nj</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">J</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">others</span><span class="p">:</span>  
+                <span class="n">nodes_per_other</span> <span class="o">=</span> <span class="n">NO</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">others</span><span class="p">)</span> 
+                <span class="n">leftover</span> <span class="o">=</span> <span class="n">NO</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">others</span><span class="p">)</span> 
+                <span class="n">index_others</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NO</span><span class="p">,</span> <span class="n">nodes_per_other</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="n">index_others</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index_others</span><span class="p">,</span> <span class="n">NO</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">others</span><span class="p">):</span>
+                    <span class="n">x0</span><span class="p">[</span><span class="n">no</span><span class="p">[</span><span class="n">index_others</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">index_others</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">state</span>
+
+                <span class="k">if</span> <span class="n">leftover</span><span class="p">:</span>
+                    <span class="n">extra_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">others</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">leftover</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">extra_indices</span><span class="p">):</span>
+                        <span class="n">x0</span><span class="p">[</span><span class="n">no</span><span class="p">[</span><span class="o">-</span><span class="n">leftover</span> <span class="o">+</span> <span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="k">return</span> <span class="n">x0</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;percentage&#39;</span><span class="p">:</span> 
+        <span class="n">N</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="n">state_percentage</span><span class="o">=</span><span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">initial_condition</span><span class="p">[</span><span class="s1">&#39;percentage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">compartment</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">compartment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">compartments</span><span class="p">)}</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span> <span class="nb">list</span><span class="p">(</span> <span class="n">state_percentage</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">)</span> <span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="p">(</span><span class="s2">&quot;The percentage for states must add-up to 1 or 100&quot;</span><span class="p">)</span>
+
+        <span class="n">states</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">state_percentage</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">percentages</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">state_percentage</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">percentages</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;hubs_number&#39;</span><span class="p">:</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="n">inst</span><span class="o">.</span><span class="n">compartments</span>
+        <span class="n">state_numbers</span><span class="o">=</span><span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">initial_condition</span><span class="p">[</span><span class="s1">&#39;hubs_number&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">compartment</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">compartment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">compartments</span><span class="p">)}</span>
+        <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">tot_no_nodes</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">state_numbers</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="n">states</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">state_numbers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">numbers</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">state_numbers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="n">networks</span><span class="o">.</span><span class="n">get_highest_degree_nodes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tot_no_nodes</span><span class="p">)</span>
+        <span class="n">x0</span><span class="p">[</span><span class="n">nodes</span><span class="p">]</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">numbers</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">tot_no_nodes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x0</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;exact&#39;</span><span class="p">:</span>    
+        <span class="k">return</span> <span class="n">x0</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">counter</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please enter a valid option for initial condition! </span><span class="se">\n</span><span class="s2"> &quot;</span><span class="p">)</span> 
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;exact&#39;</span> <span class="s1">&#39;,&#39;&#39;percentage&#39;&#39;,&#39;&#39;random&#39;</span> <span class="s1">&#39;,&#39;&#39;hubs_number&#39;</span> <span class="s1">&#39;  &#39;</span>  <span class="s1">&#39;are only valid options&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> For unvalid options FastGEMF automatically put 10 percent at inducing states </span><span class="se">\n</span><span class="s2"> and distributes 90 percent equally  between other states&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">initial_condition_func</span><span class="p">(</span><span class="n">networks</span><span class="p">,</span> <span class="n">inst</span><span class="p">,</span> 
+                                    <span class="n">initial_condition</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;default_percentage&#39;</span><span class="p">:[]},</span> <span class="n">counter</span><span class="o">=</span><span class="n">counter</span><span class="p">)</span></div>
+
+        
+       
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Hossein Samaei.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

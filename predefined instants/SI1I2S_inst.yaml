@@ -1,0 +1,43 @@
+compartments:
+- S
+- I1
+- I2
+edge_transitions:
+- from_state: S
+  inducer: I1
+  name: infection1
+  network_layer: layer1
+  rate: beta1
+  to_state: I1
+  value: 0.1
+- from_state: S
+  inducer: I2
+  name: infection2
+  network_layer: layer2
+  rate: beta2
+  to_state: I2
+  value: 0.3
+initial_conditions:
+  percentage_infected: 0.1
+name: SI1I2S
+network_layers:
+  layer1: G_5k.npz
+  layer2: G_5k.npz
+node_transitions:
+- from_state: I1
+  name: recovery1
+  rate: delta1
+  to_state: S
+  value: 0.2
+- from_state: I2
+  name: recovery2
+  rate: delta2
+  to_state: S
+  value: 0.4
+parameters:
+  beta1: 0.1
+  beta2: 0.3
+  delta1: 0.2
+  delta2: 0.4
+stop_conditions:
+  time: 2

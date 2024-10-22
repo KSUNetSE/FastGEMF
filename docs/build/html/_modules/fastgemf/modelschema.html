@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fastgemf.modelschema &mdash; FastGEMF v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fa47ad08"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FastGEMF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FastGEMF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fastgemf.modelschema</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fastgemf.modelschema</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">.visualization</span> <span class="kn">import</span> <span class="n">draw_model_graph</span>
+
+<div class="viewcode-block" id="NodeTransition">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.NodeTransition">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">NodeTransition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class representing a parametric node-based transition .</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name of the transition (e.g., &quot;recovery&quot; ).</span>
+
+<span class="sd">    from_state : str</span>
+<span class="sd">        The state the node is transitioning from (e.g., &quot;infected&quot; or &quot;S&quot;).</span>
+
+<span class="sd">    to_state : str</span>
+<span class="sd">        The state the node is transitioning to (e.g., &quot;susceptible&quot;).</span>
+
+<span class="sd">    rate : str</span>
+<span class="sd">        The rate expression or identifier for the transition (e.g., &quot;beta&quot;).</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    __str__():</span>
+<span class="sd">        Returns a formatted string for printing  the node-based transition.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">from_state</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">to_state</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">rate</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a string representation of the edge-based transition.</span>
+<span class="sd">        for example:</span>
+<span class="sd">        &quot;recovery: infected --&gt; susceptible  (delta)&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">from_state</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">to_state</span><span class="si">}</span><span class="s2"> (rate: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+<div class="viewcode-block" id="EdgeTransition">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.EdgeTransition">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EdgeTransition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class representing parametric edge-based transition of nodes.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name of the edge transition (e.g., &quot;infection&quot;).</span>
+
+<span class="sd">    from_state : str</span>
+<span class="sd">        The state the source node is transitioning from (e.g., &quot;susceptible&quot;).</span>
+<span class="sd">    to_state : str</span>
+<span class="sd">        The state the target node is transitioning to (e.g., &quot;Infected&quot;).</span>
+
+<span class="sd">    inducer : str</span>
+<span class="sd">        The node or compartment that induces the transition (e.g., &quot;Infected&quot;).</span>
+
+<span class="sd">    network_layer : str</span>
+<span class="sd">        The layer of the network where the interaction occurs (e.g., &quot;social_contacts&quot;).</span>
+
+<span class="sd">    rate : str</span>
+<span class="sd">        The rate expression or identifier for the transition (e.g., &quot;beta&quot;).</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    __str__():</span>
+<span class="sd">        Returns a formatted string representation of the edge-based transition.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">from_state</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">to_state</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">inducer</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">network_layer</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">rate</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a string  of the edg-based transition.</span>
+<span class="sd">        &quot;infection: susceptible --(Infected)-&gt; Infected on social_contacts (beta)&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">from_state</span><span class="si">}</span><span class="s2"> --(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">inducer</span><span class="si">}</span><span class="s2">)-&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">to_state</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">network_layer</span><span class="si">}</span><span class="s2"> (rate: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+    
+<div class="viewcode-block" id="ModelSchema">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelSchema</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class representing the schema of a custom parametric network-based mechanistic model, including compartments,</span>
+<span class="sd">    network layers, node transitions, and edge-based interactions. This class is basically a schema or template of the model, allowing users</span>
+<span class="sd">    to define general mechanistic model, which can later configure using ModelConfiguration class.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name of the model.</span>
+<span class="sd">    compartments : List[str]</span>
+<span class="sd">        A list of compartments representing the states in the model (e.g., Susceptible, Infected).</span>
+
+<span class="sd">    network_layers : List[str]</span>
+<span class="sd">        A list of network layers&#39; names, each representing a different mode of interaction (e.g., social, physical).</span>
+
+<span class="sd">    node_transitions : List[NodeTransition]</span>
+<span class="sd">        A list of node-based transitions object </span>
+
+<span class="sd">    edge_transitions : List[EdgeTransition]</span>
+<span class="sd">        A list of edge-based transitions object.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    define_compartment(compartments: List[str]) -&gt; &#39;ModelSchema&#39;:</span>
+<span class="sd">        Defines compartments in the model by appending them if not already present.</span>
+<span class="sd">    </span>
+<span class="sd">    add_node_transition(name: str, from_state: str, to_state: str, rate: str) -&gt; &#39;ModelSchema&#39;:</span>
+<span class="sd">        Adds a node-based transition between compartments with an associated parameteric rate(e.g., &#39;beta&#39;, &#39;delta&#39;).</span>
+<span class="sd">    </span>
+<span class="sd">    add_edge_interaction(name: str, from_state: str, to_state: str, inducer: str, network_layer: str, rate: str) -&gt; &#39;ModelSchema&#39;:</span>
+<span class="sd">        Adds an edge-based interaction between state across speicif network layer with a specified inducer and parameteric rate.</span>
+<span class="sd">    </span>
+<span class="sd">    add_network_layer(\*layers: str) -&gt; &#39;ModelSchema&#39;:</span>
+<span class="sd">        Adds one or more network layers to the model.</span>
+
+<span class="sd">    to_dict() -&gt; dict:</span>
+<span class="sd">        Converts the model schema to a dictionary format for serialization.</span>
+
+<span class="sd">    to_yaml(file_path: str):</span>
+<span class="sd">        Serializes the model schema to a YAML file.</span>
+
+<span class="sd">    from_yaml(cls, yaml_file: str) -&gt; &#39;ModelSchema&#39;:</span>
+<span class="sd">        Class method to load a model schema from a YAML file.</span>
+
+<span class="sd">    draw_model_graph():</span>
+<span class="sd">        Visualizes the model&#39;s transitions using an external visualization library.</span>
+
+<span class="sd">    __str__() -&gt; str:</span>
+<span class="sd">        Returns a string representation of the model schema, including compartments, network layers, and transitions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Custom Model&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compartments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_transitions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodeTransition</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_transitions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EdgeTransition</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="ModelSchema.define_compartment">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema.define_compartment">[docs]</a>
+    <span class="k">def</span> <span class="nf">define_compartment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compartments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;ModelSchema&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">compartment</span> <span class="ow">in</span> <span class="n">compartments</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">compartment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">compartments</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compartments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compartment</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    
+<div class="viewcode-block" id="ModelSchema.add_node_transition">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema.add_node_transition">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_node_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">from_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">to_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ModelSchema&#39;</span><span class="p">:</span>
+        <span class="n">transition</span> <span class="o">=</span> <span class="n">NodeTransition</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">from_state</span><span class="p">,</span> <span class="n">to_state</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_transitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transition</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="ModelSchema.add_edge_interaction">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema.add_edge_interaction">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_edge_interaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">from_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">to_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">inducer</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">network_layer</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ModelSchema&#39;</span><span class="p">:</span>
+        <span class="n">transition</span> <span class="o">=</span> <span class="n">EdgeTransition</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">from_state</span><span class="p">,</span> <span class="n">to_state</span><span class="p">,</span> <span class="n">inducer</span><span class="p">,</span> <span class="n">network_layer</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_transitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transition</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    
+<div class="viewcode-block" id="ModelSchema.add_network_layer">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema.add_network_layer">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_network_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">layers</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ModelSchema&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">layer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    
+
+    
+<div class="viewcode-block" id="ModelSchema.to_dict">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema.to_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;compartments&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compartments</span><span class="p">,</span>
+            <span class="s1">&#39;network_layers&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span><span class="p">,</span>
+            <span class="s1">&#39;node_transitions&#39;</span><span class="p">:</span> <span class="p">[{</span> 
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s1">&#39;from_state&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">from_state</span><span class="p">,</span> 
+                <span class="s1">&#39;to_state&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">to_state</span><span class="p">,</span>
+                <span class="s1">&#39;rate&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">rate</span>
+            <span class="p">}</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_transitions</span><span class="p">],</span>
+            <span class="s1">&#39;edge_transitions&#39;</span><span class="p">:</span> <span class="p">[{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s1">&#39;from_state&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">from_state</span><span class="p">,</span>
+                <span class="s1">&#39;to_state&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">to_state</span><span class="p">,</span>
+                <span class="s1">&#39;inducer&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">inducer</span><span class="p">,</span>
+                <span class="s1">&#39;network_layer&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">network_layer</span><span class="p">,</span>
+                <span class="s1">&#39;rate&#39;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">rate</span>
+            <span class="p">}</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_transitions</span><span class="p">]</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="ModelSchema.to_yaml">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema.to_yaml">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># Serialize the model to a YAML file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">file</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelSchema.from_yaml">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema.from_yaml">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_yaml</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">yaml_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ModelSchema&#39;</span><span class="p">:</span>
+        <span class="c1"># Deserialize a YAML file back into a Model instance</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Unnamed Model&#39;</span><span class="p">))</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">define_compartment</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;compartments&#39;</span><span class="p">])</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add_network_layer</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;network_layers&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">trans</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;node_transitions&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">node_transitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NodeTransition</span><span class="p">(</span><span class="o">**</span><span class="n">trans</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">trans</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;edge_transitions&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">edge_transitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EdgeTransition</span><span class="p">(</span><span class="o">**</span><span class="n">trans</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">model</span></div>
+
+    
+<div class="viewcode-block" id="ModelSchema.draw_model_graph">
+<a class="viewcode-back" href="../../index.html#fastgemf.modelschema.ModelSchema.draw_model_graph">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw_model_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">draw_model_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+        
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">node_trans_str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_transitions</span><span class="p">)</span>
+        <span class="n">edge_trans_str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_transitions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Compartments: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">compartments</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Network Layers:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">network_layers</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Node-Based Transitions:</span><span class="se">\n</span><span class="si">{</span><span class="n">node_trans_str</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Edge-Based Transitions:</span><span class="se">\n</span><span class="si">{</span><span class="n">edge_trans_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Hossein Samaei.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

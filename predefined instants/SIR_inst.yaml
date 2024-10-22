@@ -1,0 +1,28 @@
+compartments:
+- S
+- I
+- R
+edge_transitions:
+- from_state: S
+  inducer: I
+  name: infection
+  network_layer: contact_layer
+  rate: beta
+  to_state: I
+  value: 0.1
+initial_conditions:
+  percentage_infected: 0.1
+name: SIR Model
+network_layers:
+  contact_layer: G_5k.npz
+node_transitions:
+- from_state: I
+  name: recovery
+  rate: delta
+  to_state: R
+  value: 0.2
+parameters:
+  beta: 0.1
+  delta: 0.2
+stop_conditions:
+  time: 100

@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fastgemf.post_population &mdash; FastGEMF v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fa47ad08"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FastGEMF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FastGEMF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fastgemf.post_population</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fastgemf.post_population</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<div class="viewcode-block" id="post_population">
+<a class="viewcode-back" href="../../index.html#fastgemf.post_population.post_population">[docs]</a>
+<span class="k">def</span> <span class="nf">post_population</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">model_matrices</span><span class="p">,</span><span class="n">event_data</span><span class="p">,</span> <span class="n">nodes</span>  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The post_population caclulcates the evolution of state through the total time of simulation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    x0 : np.ndarray</span>
+<span class="sd">        The initial state of network</span>
+
+<span class="sd">    model_matrices : ModelMatrices</span>
+<span class="sd">        A_beta, A_delta, q, b_l, b_il, etc</span>
+
+<span class="sd">    event_data : EventData</span>
+<span class="sd">        Contains the information about event times(min_time) and state transitions (states_k and states_k_plus_1) and sampled nodes in each iteration </span>
+
+<span class="sd">    nodes : int</span>
+<span class="sd">        Total number of nodes in the network.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    time : np.array</span>
+<span class="sd">        absolute times</span>
+
+<span class="sd">    StateCount : np.ndarray</span>
+<span class="sd">        An M x T array (M compartments, T time steps), where each element represents the number of</span>
+<span class="sd">        nodes in each compartment at each time step.</span>
+<span class="sd">    ts : np.ndarray</span>
+<span class="sd">       interarrival times</span>
+
+<span class="sd">    states_k : np.ndarray</span>
+<span class="sd">        The compartment states before each event (states_k).</span>
+
+<span class="sd">    states_k_plus_1 : np.ndarray</span>
+<span class="sd">        The compartment states after each event (states_k_plus_1).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">M</span><span class="o">=</span><span class="n">model_matrices</span><span class="o">.</span><span class="n">M</span>
+    <span class="n">N</span><span class="o">=</span><span class="n">nodes</span>
+    <span class="n">time</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">((</span><span class="n">event_data</span><span class="o">.</span><span class="n">min_times</span><span class="p">))</span>
+    <span class="n">ts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">states_k</span><span class="o">=</span><span class="n">event_data</span><span class="o">.</span><span class="n">states_k</span>
+    <span class="n">states_k_plus_1</span><span class="o">=</span><span class="n">event_data</span><span class="o">.</span><span class="n">states_k_plus_1</span>
+
+    <span class="n">ts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">=</span><span class="n">ts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">ts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">X0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">col_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> 
+    <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">X0</span><span class="p">,(</span><span class="n">x0</span><span class="p">,</span><span class="n">col_i</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">StateCount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">StateCount</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">X0</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">DX</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="p">)))</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">DX</span><span class="p">,</span> <span class="p">(</span><span class="n">states_k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="p">))),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">DX</span><span class="p">,</span> <span class="p">(</span><span class="n">states_k_plus_1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="p">))),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">StateCount</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">DX</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">StateCount</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">time</span><span class="p">,</span> <span class="n">StateCount</span><span class="p">[:,:],</span>  <span class="n">ts</span><span class="p">,</span> <span class="n">states_k</span><span class="p">,</span> <span class="n">states_k_plus_1</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Hossein Samaei.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

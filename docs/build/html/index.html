@@ -1,0 +1,1503 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to FastGEMF’s documentation! &mdash; FastGEMF v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fa47ad08"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            FastGEMF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to FastGEMF’s documentation!</a><ul>
+<li><a class="reference internal" href="#fastgemf.modelschema.EdgeTransition"><code class="docutils literal notranslate"><span class="pre">EdgeTransition</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.modelschema.EdgeTransition.from_state"><code class="docutils literal notranslate"><span class="pre">EdgeTransition.from_state</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.EdgeTransition.inducer"><code class="docutils literal notranslate"><span class="pre">EdgeTransition.inducer</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.EdgeTransition.name"><code class="docutils literal notranslate"><span class="pre">EdgeTransition.name</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.EdgeTransition.network_layer"><code class="docutils literal notranslate"><span class="pre">EdgeTransition.network_layer</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.EdgeTransition.rate"><code class="docutils literal notranslate"><span class="pre">EdgeTransition.rate</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.EdgeTransition.to_state"><code class="docutils literal notranslate"><span class="pre">EdgeTransition.to_state</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema"><code class="docutils literal notranslate"><span class="pre">ModelSchema</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema.add_edge_interaction"><code class="docutils literal notranslate"><span class="pre">ModelSchema.add_edge_interaction()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema.add_network_layer"><code class="docutils literal notranslate"><span class="pre">ModelSchema.add_network_layer()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema.add_node_transition"><code class="docutils literal notranslate"><span class="pre">ModelSchema.add_node_transition()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema.define_compartment"><code class="docutils literal notranslate"><span class="pre">ModelSchema.define_compartment()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema.draw_model_graph"><code class="docutils literal notranslate"><span class="pre">ModelSchema.draw_model_graph()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema.from_yaml"><code class="docutils literal notranslate"><span class="pre">ModelSchema.from_yaml()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema.to_dict"><code class="docutils literal notranslate"><span class="pre">ModelSchema.to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.ModelSchema.to_yaml"><code class="docutils literal notranslate"><span class="pre">ModelSchema.to_yaml()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.modelschema.NodeTransition"><code class="docutils literal notranslate"><span class="pre">NodeTransition</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.modelschema.NodeTransition.from_state"><code class="docutils literal notranslate"><span class="pre">NodeTransition.from_state</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.NodeTransition.name"><code class="docutils literal notranslate"><span class="pre">NodeTransition.name</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.NodeTransition.rate"><code class="docutils literal notranslate"><span class="pre">NodeTransition.rate</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelschema.NodeTransition.to_state"><code class="docutils literal notranslate"><span class="pre">NodeTransition.to_state</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.EdgeTransitionValued"><code class="docutils literal notranslate"><span class="pre">EdgeTransitionValued</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.EdgeTransitionValued.from_state"><code class="docutils literal notranslate"><span class="pre">EdgeTransitionValued.from_state</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.EdgeTransitionValued.inducer"><code class="docutils literal notranslate"><span class="pre">EdgeTransitionValued.inducer</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.EdgeTransitionValued.name"><code class="docutils literal notranslate"><span class="pre">EdgeTransitionValued.name</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.EdgeTransitionValued.network_layer"><code class="docutils literal notranslate"><span class="pre">EdgeTransitionValued.network_layer</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.EdgeTransitionValued.rate"><code class="docutils literal notranslate"><span class="pre">EdgeTransitionValued.rate</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.EdgeTransitionValued.to_state"><code class="docutils literal notranslate"><span class="pre">EdgeTransitionValued.to_state</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.EdgeTransitionValued.value"><code class="docutils literal notranslate"><span class="pre">EdgeTransitionValued.value</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration"><code class="docutils literal notranslate"><span class="pre">ModelConfiguration</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration.add_parameter"><code class="docutils literal notranslate"><span class="pre">ModelConfiguration.add_parameter()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration.from_yaml"><code class="docutils literal notranslate"><span class="pre">ModelConfiguration.from_yaml()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration.get_networks"><code class="docutils literal notranslate"><span class="pre">ModelConfiguration.get_networks()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration.load_network_directory"><code class="docutils literal notranslate"><span class="pre">ModelConfiguration.load_network_directory()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration.to_dict"><code class="docutils literal notranslate"><span class="pre">ModelConfiguration.to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration.to_yaml"><code class="docutils literal notranslate"><span class="pre">ModelConfiguration.to_yaml()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.NodeTransitionValued"><code class="docutils literal notranslate"><span class="pre">NodeTransitionValued</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.NodeTransitionValued.from_state"><code class="docutils literal notranslate"><span class="pre">NodeTransitionValued.from_state</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.NodeTransitionValued.name"><code class="docutils literal notranslate"><span class="pre">NodeTransitionValued.name</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.NodeTransitionValued.rate"><code class="docutils literal notranslate"><span class="pre">NodeTransitionValued.rate</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.NodeTransitionValued.to_state"><code class="docutils literal notranslate"><span class="pre">NodeTransitionValued.to_state</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.modelconfiguration.NodeTransitionValued.value"><code class="docutils literal notranslate"><span class="pre">NodeTransitionValued.value</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeNp"><code class="docutils literal notranslate"><span class="pre">TimeNp</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeNp.generate_times"><code class="docutils literal notranslate"><span class="pre">TimeNp.generate_times()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeNp.get_min"><code class="docutils literal notranslate"><span class="pre">TimeNp.get_min()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeNp.pop_and_push"><code class="docutils literal notranslate"><span class="pre">TimeNp.pop_and_push()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeNp.update"><code class="docutils literal notranslate"><span class="pre">TimeNp.update()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeSorted"><code class="docutils literal notranslate"><span class="pre">TimeSorted</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeSorted.generate_times"><code class="docutils literal notranslate"><span class="pre">TimeSorted.generate_times()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeSorted.get_min"><code class="docutils literal notranslate"><span class="pre">TimeSorted.get_min()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeSorted.pop_and_push"><code class="docutils literal notranslate"><span class="pre">TimeSorted.pop_and_push()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.times_structure.TimeSorted.update"><code class="docutils literal notranslate"><span class="pre">TimeSorted.update()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.error.StopLoopException"><code class="docutils literal notranslate"><span class="pre">StopLoopException</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFcore.sample_event"><code class="docutils literal notranslate"><span class="pre">sample_event()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFcore.sample_new_state"><code class="docutils literal notranslate"><span class="pre">sample_new_state()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFcore.update_network"><code class="docutils literal notranslate"><span class="pre">update_network()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFcore.update_node_rate"><code class="docutils literal notranslate"><span class="pre">update_node_rate()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.forward"><code class="docutils literal notranslate"><span class="pre">Simulation.forward()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.from_yaml"><code class="docutils literal notranslate"><span class="pre">Simulation.from_yaml()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.get_results"><code class="docutils literal notranslate"><span class="pre">Simulation.get_results()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.plot_results"><code class="docutils literal notranslate"><span class="pre">Simulation.plot_results()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.reset"><code class="docutils literal notranslate"><span class="pre">Simulation.reset()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.run"><code class="docutils literal notranslate"><span class="pre">Simulation.run()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.run_signle_time"><code class="docutils literal notranslate"><span class="pre">Simulation.run_signle_time()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.stop_condition"><code class="docutils literal notranslate"><span class="pre">Simulation.stop_condition()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.GEMFsimulation.Simulation.to_yaml"><code class="docutils literal notranslate"><span class="pre">Simulation.to_yaml()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.initial_condition.initial_condition_func"><code class="docutils literal notranslate"><span class="pre">initial_condition_func()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.EventData"><code class="docutils literal notranslate"><span class="pre">EventData</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.initializer.EventData.add_event"><code class="docutils literal notranslate"><span class="pre">EventData.add_event()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.EventData.min_times"><code class="docutils literal notranslate"><span class="pre">EventData.min_times</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.EventData.sampled_nodes"><code class="docutils literal notranslate"><span class="pre">EventData.sampled_nodes</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.EventData.states_k"><code class="docutils literal notranslate"><span class="pre">EventData.states_k</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.EventData.states_k_plus_1"><code class="docutils literal notranslate"><span class="pre">EventData.states_k_plus_1</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.initializer.Initialize"><code class="docutils literal notranslate"><span class="pre">Initialize</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices"><code class="docutils literal notranslate"><span class="pre">ModelMatrices</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.A_beta"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.A_beta</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.A_delta"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.A_delta</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.L"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.L</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.M"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.M</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.bi"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.bi</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.bil"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.bil</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.di"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.di</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.from_instant"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.from_instant()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.layers_infuencer"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.layers_infuencer</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.ModelMatrices.q"><code class="docutils literal notranslate"><span class="pre">ModelMatrices.q</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.initializer.RateArray"><code class="docutils literal notranslate"><span class="pre">RateArray</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.initializer.RateArray.Nq"><code class="docutils literal notranslate"><span class="pre">RateArray.Nq</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.RateArray.R"><code class="docutils literal notranslate"><span class="pre">RateArray.R</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.RateArray.Rn"><code class="docutils literal notranslate"><span class="pre">RateArray.Rn</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.initializer.RateArray.from_instant"><code class="docutils literal notranslate"><span class="pre">RateArray.from_instant()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.network.Network"><code class="docutils literal notranslate"><span class="pre">Network</span></code></a><ul>
+<li><a class="reference internal" href="#fastgemf.network.Network.get_highest_degree_nodes"><code class="docutils literal notranslate"><span class="pre">Network.get_highest_degree_nodes()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.network.Network.get_in_neighbors"><code class="docutils literal notranslate"><span class="pre">Network.get_in_neighbors()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.network.Network.get_in_weight"><code class="docutils literal notranslate"><span class="pre">Network.get_in_weight()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.network.Network.get_out_neighbors"><code class="docutils literal notranslate"><span class="pre">Network.get_out_neighbors()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.network.Network.get_out_weight"><code class="docutils literal notranslate"><span class="pre">Network.get_out_weight()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fastgemf.network.edgelist_to_csr"><code class="docutils literal notranslate"><span class="pre">edgelist_to_csr()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.post_population.post_population"><code class="docutils literal notranslate"><span class="pre">post_population()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.stop_conditions.stop_cond"><code class="docutils literal notranslate"><span class="pre">stop_cond()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.utils.extract_transition_parameters"><code class="docutils literal notranslate"><span class="pre">extract_transition_parameters()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.utils.find_key_for_value"><code class="docutils literal notranslate"><span class="pre">find_key_for_value()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.utils.invert_influence_dict"><code class="docutils literal notranslate"><span class="pre">invert_influence_dict()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.utils.pick_fastest_method"><code class="docutils literal notranslate"><span class="pre">pick_fastest_method()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.utils.sample"><code class="docutils literal notranslate"><span class="pre">sample()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.utils.setup_simulation_matrices"><code class="docutils literal notranslate"><span class="pre">setup_simulation_matrices()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.visualization.draw_model_graph"><code class="docutils literal notranslate"><span class="pre">draw_model_graph()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.visualization.extend_to_max_length"><code class="docutils literal notranslate"><span class="pre">extend_to_max_length()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.visualization.plot_multiple_results"><code class="docutils literal notranslate"><span class="pre">plot_multiple_results()</span></code></a></li>
+<li><a class="reference internal" href="#fastgemf.visualization.plot_results"><code class="docutils literal notranslate"><span class="pre">plot_results()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">FastGEMF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to FastGEMF’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-fastgemf-s-documentation">
+<h1>Welcome to FastGEMF’s documentation!<a class="headerlink" href="#welcome-to-fastgemf-s-documentation" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<dl class="py class" id="module-fastgemf.modelschema">
+<span id="module-fastgemf"></span><span id="module-fastgemf.__init__"></span><dt class="sig sig-object py" id="fastgemf.modelschema.EdgeTransition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.modelschema.</span></span><span class="sig-name descname"><span class="pre">EdgeTransition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inducer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelschema.html#EdgeTransition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.EdgeTransition" title="Link to this definition"></a></dt>
+<dd><p>A class representing parametric edge-based transition of nodes.</p>
+<section id="attributes">
+<h2>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the edge transition (e.g., “infection”).</p>
+</dd>
+<dt>from_state<span class="classifier">str</span></dt><dd><p>The state the source node is transitioning from (e.g., “susceptible”).</p>
+</dd>
+<dt>to_state<span class="classifier">str</span></dt><dd><p>The state the target node is transitioning to (e.g., “Infected”).</p>
+</dd>
+<dt>inducer<span class="classifier">str</span></dt><dd><p>The node or compartment that induces the transition (e.g., “Infected”).</p>
+</dd>
+<dt>network_layer<span class="classifier">str</span></dt><dd><p>The layer of the network where the interaction occurs (e.g., “social_contacts”).</p>
+</dd>
+<dt>rate<span class="classifier">str</span></dt><dd><p>The rate expression or identifier for the transition (e.g., “beta”).</p>
+</dd>
+</dl>
+</section>
+<section id="methods">
+<h2>Methods:<a class="headerlink" href="#methods" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>__str__():</dt><dd><p>Returns a formatted string representation of the edge-based transition.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.EdgeTransition.from_state">
+<span class="sig-name descname"><span class="pre">from_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.EdgeTransition.from_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.EdgeTransition.inducer">
+<span class="sig-name descname"><span class="pre">inducer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.EdgeTransition.inducer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.EdgeTransition.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.EdgeTransition.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.EdgeTransition.network_layer">
+<span class="sig-name descname"><span class="pre">network_layer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.EdgeTransition.network_layer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.EdgeTransition.rate">
+<span class="sig-name descname"><span class="pre">rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.EdgeTransition.rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.EdgeTransition.to_state">
+<span class="sig-name descname"><span class="pre">to_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.EdgeTransition.to_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.modelschema.</span></span><span class="sig-name descname"><span class="pre">ModelSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Custom</span> <span class="pre">Model'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema" title="Link to this definition"></a></dt>
+<dd><p>A class representing the schema of a custom parametric network-based mechanistic model, including compartments,
+network layers, node transitions, and edge-based interactions. This class is basically a schema or template of the model, allowing users
+to define general mechanistic model, which can later configure using ModelConfiguration class.</p>
+<section id="id1">
+<h2>Attributes:<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the model.</p>
+</dd>
+<dt>compartments<span class="classifier">List[str]</span></dt><dd><p>A list of compartments representing the states in the model (e.g., Susceptible, Infected).</p>
+</dd>
+<dt>network_layers<span class="classifier">List[str]</span></dt><dd><p>A list of network layers’ names, each representing a different mode of interaction (e.g., social, physical).</p>
+</dd>
+<dt>node_transitions<span class="classifier">List[NodeTransition]</span></dt><dd><p>A list of node-based transitions object</p>
+</dd>
+<dt>edge_transitions<span class="classifier">List[EdgeTransition]</span></dt><dd><p>A list of edge-based transitions object.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Methods:<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>define_compartment(compartments: List[str]) -&gt; ‘ModelSchema’:</dt><dd><p>Defines compartments in the model by appending them if not already present.</p>
+</dd>
+<dt>add_node_transition(name: str, from_state: str, to_state: str, rate: str) -&gt; ‘ModelSchema’:</dt><dd><p>Adds a node-based transition between compartments with an associated parameteric rate(e.g., ‘beta’, ‘delta’).</p>
+</dd>
+<dt>add_edge_interaction(name: str, from_state: str, to_state: str, inducer: str, network_layer: str, rate: str) -&gt; ‘ModelSchema’:</dt><dd><p>Adds an edge-based interaction between state across speicif network layer with a specified inducer and parameteric rate.</p>
+</dd>
+<dt>add_network_layer(*layers: str) -&gt; ‘ModelSchema’:</dt><dd><p>Adds one or more network layers to the model.</p>
+</dd>
+<dt>to_dict() -&gt; dict:</dt><dd><p>Converts the model schema to a dictionary format for serialization.</p>
+</dd>
+<dt>to_yaml(file_path: str):</dt><dd><p>Serializes the model schema to a YAML file.</p>
+</dd>
+<dt>from_yaml(cls, yaml_file: str) -&gt; ‘ModelSchema’:</dt><dd><p>Class method to load a model schema from a YAML file.</p>
+</dd>
+<dt>draw_model_graph():</dt><dd><p>Visualizes the model’s transitions using an external visualization library.</p>
+</dd>
+<dt>__str__() -&gt; str:</dt><dd><p>Returns a string representation of the model schema, including compartments, network layers, and transitions.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema.add_edge_interaction">
+<span class="sig-name descname"><span class="pre">add_edge_interaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inducer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#fastgemf.modelschema.ModelSchema" title="fastgemf.modelschema.ModelSchema"><span class="pre">ModelSchema</span></a></span></span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema.add_edge_interaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema.add_edge_interaction" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema.add_network_layer">
+<span class="sig-name descname"><span class="pre">add_network_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#fastgemf.modelschema.ModelSchema" title="fastgemf.modelschema.ModelSchema"><span class="pre">ModelSchema</span></a></span></span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema.add_network_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema.add_network_layer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema.add_node_transition">
+<span class="sig-name descname"><span class="pre">add_node_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#fastgemf.modelschema.ModelSchema" title="fastgemf.modelschema.ModelSchema"><span class="pre">ModelSchema</span></a></span></span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema.add_node_transition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema.add_node_transition" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema.define_compartment">
+<span class="sig-name descname"><span class="pre">define_compartment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compartments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#fastgemf.modelschema.ModelSchema" title="fastgemf.modelschema.ModelSchema"><span class="pre">ModelSchema</span></a></span></span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema.define_compartment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema.define_compartment" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema.draw_model_graph">
+<span class="sig-name descname"><span class="pre">draw_model_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema.draw_model_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema.draw_model_graph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema.from_yaml">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yaml_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#fastgemf.modelschema.ModelSchema" title="fastgemf.modelschema.ModelSchema"><span class="pre">ModelSchema</span></a></span></span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema.from_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema.from_yaml" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema.to_dict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelschema.ModelSchema.to_yaml">
+<span class="sig-name descname"><span class="pre">to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelschema.html#ModelSchema.to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.ModelSchema.to_yaml" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fastgemf.modelschema.NodeTransition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.modelschema.</span></span><span class="sig-name descname"><span class="pre">NodeTransition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelschema.html#NodeTransition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelschema.NodeTransition" title="Link to this definition"></a></dt>
+<dd><p>A class representing a parametric node-based transition .</p>
+<section id="id3">
+<h2>Attributes:<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the transition (e.g., “recovery” ).</p>
+</dd>
+<dt>from_state<span class="classifier">str</span></dt><dd><p>The state the node is transitioning from (e.g., “infected” or “S”).</p>
+</dd>
+<dt>to_state<span class="classifier">str</span></dt><dd><p>The state the node is transitioning to (e.g., “susceptible”).</p>
+</dd>
+<dt>rate<span class="classifier">str</span></dt><dd><p>The rate expression or identifier for the transition (e.g., “beta”).</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h2>Methods:<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>__str__():</dt><dd><p>Returns a formatted string for printing  the node-based transition.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.NodeTransition.from_state">
+<span class="sig-name descname"><span class="pre">from_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.NodeTransition.from_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.NodeTransition.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.NodeTransition.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.NodeTransition.rate">
+<span class="sig-name descname"><span class="pre">rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.NodeTransition.rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelschema.NodeTransition.to_state">
+<span class="sig-name descname"><span class="pre">to_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelschema.NodeTransition.to_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class" id="module-fastgemf.modelconfiguration">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.EdgeTransitionValued">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.modelconfiguration.</span></span><span class="sig-name descname"><span class="pre">EdgeTransitionValued</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inducer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#EdgeTransitionValued"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.EdgeTransitionValued" title="Link to this definition"></a></dt>
+<dd><p>A class representing an edge-based transition of nodes with an associated value,</p>
+<section id="id5">
+<h2>Attributes:<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the edge transition (e.g., “infection”).</p>
+</dd>
+<dt>from_state<span class="classifier">str</span></dt><dd><p>The state the source node is transitioning from (e.g., “susceptible”).</p>
+</dd>
+<dt>to_state<span class="classifier">str</span></dt><dd><p>The state the target node is transitioning to (e.g., “Infected”).</p>
+</dd>
+<dt>inducer<span class="classifier">str</span></dt><dd><p>The node or compartment that induces the transition (e.g., “Infected”).</p>
+</dd>
+<dt>network_layer<span class="classifier">str</span></dt><dd><p>The layer of the network where the interaction occurs (e.g., “social_contacts”).</p>
+</dd>
+<dt>rate<span class="classifier">str</span></dt><dd><p>The rate expression or identifier for the transition (e.g., “beta”).</p>
+</dd>
+<dt>value<span class="classifier">float</span></dt><dd><p>The numerical value associated with the rate (e.g., 0.05).</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h2>Methods:<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>__str__():</dt><dd><p>Returns a formatted string representation of the edge-based transition.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.EdgeTransitionValued.from_state">
+<span class="sig-name descname"><span class="pre">from_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.EdgeTransitionValued.from_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.EdgeTransitionValued.inducer">
+<span class="sig-name descname"><span class="pre">inducer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.EdgeTransitionValued.inducer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.EdgeTransitionValued.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.EdgeTransitionValued.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.EdgeTransitionValued.network_layer">
+<span class="sig-name descname"><span class="pre">network_layer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.EdgeTransitionValued.network_layer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.EdgeTransitionValued.rate">
+<span class="sig-name descname"><span class="pre">rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.EdgeTransitionValued.rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.EdgeTransitionValued.to_state">
+<span class="sig-name descname"><span class="pre">to_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.EdgeTransitionValued.to_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.EdgeTransitionValued.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.EdgeTransitionValued.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.ModelConfiguration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.modelconfiguration.</span></span><span class="sig-name descname"><span class="pre">ModelConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compartments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#ModelConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.ModelConfiguration" title="Link to this definition"></a></dt>
+<dd><p>A class for speciyng the values for the parametric mechanistic model deifned using ModelSchema. User can convert to/from YAML format for easier reproducibility of the results and</p>
+<section id="id7">
+<h2>Attributes:<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>model<span class="classifier">Any, optional</span></dt><dd><p>An instance of the model that contains predefined settings, such as name, compartments, and network layers.</p>
+</dd>
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the model.</p>
+</dd>
+<dt>compartments<span class="classifier">List[str]</span></dt><dd><p>List of compartments in the model, representing the possible states of nodes.</p>
+</dd>
+<dt>network_layers<span class="classifier">List[str]</span></dt><dd><p>The different layers of the network representing different modes of interaction (e.g., social, physical,sexual, etc.).</p>
+</dd>
+<dt>node_transitions_parametric<span class="classifier">List[dict]</span></dt><dd><p>A list of parametric node transitions before parameter values are assigned.</p>
+</dd>
+<dt>edge_transitions_parametric<span class="classifier">List[dict]</span></dt><dd><p>A list of parametric edge transitions before parameter values are assigned.</p>
+</dd>
+<dt>parameters<span class="classifier">Dict[str, float]</span></dt><dd><p>A dictionary of parameters and their values that are used in the model’s transitions.</p>
+</dd>
+<dt>node_transitions_valued<span class="classifier">List[NodeTransitionValued]</span></dt><dd><p>A list of node transitions with assigned parameter values.</p>
+</dd>
+<dt>edge_transitions_valued<span class="classifier">List[EdgeTransitionValued]</span></dt><dd><p>A list of edge transitions with assigned parameter values.</p>
+</dd>
+<dt>network_directories<span class="classifier">Dict[str, str]</span></dt><dd><p>A dictionary mapping network layers to their file directories for loading network data.</p>
+</dd>
+<dt>networks<span class="classifier">Dict[str, Any]</span></dt><dd><p>A dictionary mapping network layers to their network graph objects</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h2>Methods:<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>get_networks(**graphs):</dt><dd><p>Updates the network graphs for the specified layers by receiving the CSR fomrat or Adjacency matrix.</p>
+</dd>
+<dt>load_network_directory(**direct):</dt><dd><p>Loads networks from file directories for specified layers.</p>
+</dd>
+<dt>add_parameter(**kwargs):</dt><dd><p>Adds model parameters and updates transitions based on these parameters.</p>
+</dd>
+<dt>_update_transitions():</dt><dd><p>Updates node and edge transitions with the current parameter values.</p>
+</dd>
+<dt>to_dict() -&gt; dict:</dt><dd><p>Converts the model configuration into a dictionary format.</p>
+</dd>
+<dt>to_yaml(file_path: str):</dt><dd><p>Saves the model configuration as a YAML file.</p>
+</dd>
+<dt>from_yaml(yaml_file: str) -&gt; ‘ModelConfiguration’:</dt><dd><p>Loads a model configuration from a YAML file.</p>
+</dd>
+<dt>__str__() -&gt; str:</dt><dd><p>Provides a string representation of the model, including compartments, network layers, and transitions.</p>
+</dd>
+<dt>_get_transition_matrices():</dt><dd><p>Generates simulation matrices based on the model’s transitions and parameters.</p>
+</dd>
+<dt>_get_GEMF_matrices():</dt><dd><p>Constructs GEMF  transition matrices using the current parameters.</p>
+</dd>
+<dt>_print_GEMF_matrices():</dt><dd><p>Prints the GEMF matrices and the model’s configuration for debugging and verification purposes.
+Comment: Sine we map states to numerical values, susceptible is always mapped to zero.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.ModelConfiguration.add_parameter">
+<span class="sig-name descname"><span class="pre">add_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#ModelConfiguration.add_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.ModelConfiguration.add_parameter" title="Link to this definition"></a></dt>
+<dd><p>updates node and edge transitions based on the new values.
+for example:
+SIR=ModeConfiguration.from_yaml(“SIR.yaml”) # creating the ModelConfiguration instance
+SIR.add_parameter(beta=.05, delta=.01) # network_1 should be either adjaceny matrix or CSR format save as .npz format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.ModelConfiguration.from_yaml">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yaml_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration" title="fastgemf.modelconfiguration.ModelConfiguration"><span class="pre">ModelConfiguration</span></a></span></span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#ModelConfiguration.from_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.ModelConfiguration.from_yaml" title="Link to this definition"></a></dt>
+<dd><p>Loads a model configuration from a YAML file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.ModelConfiguration.get_networks">
+<span class="sig-name descname"><span class="pre">get_networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">graphs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#ModelConfiguration.get_networks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.ModelConfiguration.get_networks" title="Link to this definition"></a></dt>
+<dd><p>update network graphs by recieving network objects for each user specified layeryers.
+for example:
+SIR=ModeConfiguration.from_yaml(“SIR.yaml”) # creating the ModelConfiguration instance
+SIR.get_networks(layer_1=network_1) # network_1 should be either adjaceny matrix or CSR format. of not, transform before passing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.ModelConfiguration.load_network_directory">
+<span class="sig-name descname"><span class="pre">load_network_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">direct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#ModelConfiguration.load_network_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.ModelConfiguration.load_network_directory" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Update network graphs by loading network from their directories.
+for example:
+SIR=ModeConfiguration.from_yaml(“SIR.yaml”) # creating the ModelConfiguration instance
+SIR.load_network_directory(layer_1=usrdefinedpath</p>
+</div></blockquote>
+<p>etwork_1.npz) # network_1 should be either adjaceny matrix or CSR format save as .npz format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.ModelConfiguration.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#ModelConfiguration.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.ModelConfiguration.to_dict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.ModelConfiguration.to_yaml">
+<span class="sig-name descname"><span class="pre">to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#ModelConfiguration.to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.ModelConfiguration.to_yaml" title="Link to this definition"></a></dt>
+<dd><p>Saves the model configuration as a YAML file.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.NodeTransitionValued">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.modelconfiguration.</span></span><span class="sig-name descname"><span class="pre">NodeTransitionValued</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/modelconfiguration.html#NodeTransitionValued"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.modelconfiguration.NodeTransitionValued" title="Link to this definition"></a></dt>
+<dd><p>A class representing a node-based transition which has  a value for the transiton.</p>
+<section id="id9">
+<h2>Attributes:<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the transition (e.g., “recovery” ).</p>
+</dd>
+<dt>from_state<span class="classifier">str</span></dt><dd><p>The state the node is transitioning from (e.g., “infected” or “S”).</p>
+</dd>
+<dt>to_state<span class="classifier">str</span></dt><dd><p>The state the node is transitioning to (e.g., “susceptible”).</p>
+</dd>
+<dt>rate<span class="classifier">str</span></dt><dd><p>The rate expression or identifier for the transition (e.g., “beta”).</p>
+</dd>
+<dt>value<span class="classifier">float</span></dt><dd><p>The numerical value associated with the rate (e.g., 0.01).</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h2>Methods:<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>__str__():</dt><dd><p>Returns a formatted string for printing  the node-based transition.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.NodeTransitionValued.from_state">
+<span class="sig-name descname"><span class="pre">from_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.NodeTransitionValued.from_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.NodeTransitionValued.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.NodeTransitionValued.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.NodeTransitionValued.rate">
+<span class="sig-name descname"><span class="pre">rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.NodeTransitionValued.rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.NodeTransitionValued.to_state">
+<span class="sig-name descname"><span class="pre">to_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.NodeTransitionValued.to_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.modelconfiguration.NodeTransitionValued.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fastgemf.modelconfiguration.NodeTransitionValued.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class" id="module-fastgemf.times_structure">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeNp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.times_structure.</span></span><span class="sig-name descname"><span class="pre">TimeNp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeNp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeNp" title="Link to this definition"></a></dt>
+<dd><p>Using NumPy Library for sampling the nodes(storing absolute times and finding the node with min time)</p>
+<section id="id11">
+<h2>Attributes:<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>times_array<span class="classifier">np.ndarray</span></dt><dd><p>Array storing the absolute times for nodes.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h2>Methods:<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>generate_times(rates):</dt><dd><p>Class method that initializes a TimeNp instance by generating times for each node based on the provided rates.</p>
+</dd>
+<dt>get_min():</dt><dd><p>Returns the node with the minimum event time and its corresponding absolute time.</p>
+</dd>
+<dt>pop_and_push(node, tmin, Rn_node):</dt><dd><p>Updates the time for a node after an event and pushes the new time back into the array.</p>
+</dd>
+<dt>update(affected_nodes, tmin, Rn_affected):</dt><dd><p>Updates the abosolute times for affected nodes.</p>
+</dd>
+<dt>__len__():</dt><dd><p>Returns the number of nodes being tracked in the times array.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeNp.generate_times">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeNp.generate_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeNp.generate_times" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeNp.get_min">
+<span class="sig-name descname"><span class="pre">get_min</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeNp.get_min"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeNp.get_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeNp.pop_and_push">
+<span class="sig-name descname"><span class="pre">pop_and_push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rn_node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeNp.pop_and_push"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeNp.pop_and_push" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeNp.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">affected_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rn_affected</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeNp.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeNp.update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeSorted">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.times_structure.</span></span><span class="sig-name descname"><span class="pre">TimeSorted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Rn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeSorted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeSorted" title="Link to this definition"></a></dt>
+<dd><p>Using SortedList Library for sampling the nodes(finding the node with min abosulte time)</p>
+<section id="id13">
+<h2>Attributes:<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>times_array<span class="classifier">np.ndarray</span></dt><dd><p>Array storing the abosulte times for each node. for keeping the track of absolute times and their corresponding nodes.</p>
+</dd>
+<dt>times_sorted<span class="classifier">SortedList</span></dt><dd><p>Sorted list of nodes and their abosulte times.</p>
+</dd>
+<dt>minArg<span class="classifier">int</span></dt><dd><p>The node with the current minimum abosulte time.</p>
+</dd>
+<dt>minValue<span class="classifier">float</span></dt><dd><p>The minimum abosulte time.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h2>Methods:<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>generate_times(Rn):</dt><dd><p>Class method that initializes a TimeSorted instance by generating abosulte times for each node based on the provided rates.</p>
+</dd>
+<dt>get_min():</dt><dd><p>Returns the node with the minimum abosulte time and the corresponding time.</p>
+</dd>
+<dt>pop_and_push(node, tmin, Rn_node):</dt><dd><p>Updates the abosulte time for a node and reinserts it into the sorted list.</p>
+</dd>
+<dt>update(affected_nodes, tmin, Rn_affected):</dt><dd><p>Updates the abosulte times for affected nodes in the sorted list.</p>
+</dd>
+<dt>__len__():</dt><dd><p>Returns the number of nodes being tracked in the sorted list.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeSorted.generate_times">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Rn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeSorted.generate_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeSorted.generate_times" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeSorted.get_min">
+<span class="sig-name descname"><span class="pre">get_min</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeSorted.get_min"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeSorted.get_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeSorted.pop_and_push">
+<span class="sig-name descname"><span class="pre">pop_and_push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rn_node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeSorted.pop_and_push"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeSorted.pop_and_push" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.times_structure.TimeSorted.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">affected_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rn_affected</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/times_structure.html#TimeSorted.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.times_structure.TimeSorted.update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py exception" id="module-fastgemf.error">
+<dt class="sig sig-object py" id="fastgemf.error.StopLoopException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.error.</span></span><span class="sig-name descname"><span class="pre">StopLoopException</span></span><a class="reference internal" href="_modules/fastgemf/error.html#StopLoopException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.error.StopLoopException" title="Link to this definition"></a></dt>
+<dd><p>This raise the errror when due numerical precision zoro rates are non-zero but very close to zero.</p>
+</dd></dl>
+
+<dl class="py function" id="module-fastgemf.GEMFcore">
+<dt class="sig sig-object py" id="fastgemf.GEMFcore.sample_event">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.GEMFcore.</span></span><span class="sig-name descname"><span class="pre">sample_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_matrices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_arrays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFcore.html#sample_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFcore.sample_event" title="Link to this definition"></a></dt>
+<dd><p>Samples the next event by finding the node with the minimum absolute time, updating its state, and adjusting its rate.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>times<span class="classifier">TimeNP or TimeSorted</span></dt><dd><p>An object responsible for handling absolute times.</p>
+</dd>
+<dt>event_data<span class="classifier">EventData</span></dt><dd><p>An object that tracks node states before and after events.</p>
+</dd>
+<dt>model_matrices<span class="classifier">ModelMatrices</span></dt><dd><p>Contains the model matrices used in the GEMF framework.</p>
+</dd>
+<dt>rate_arrays<span class="classifier">RateArray</span></dt><dd><p>Arrays containing the transition rates for each node.</p>
+</dd>
+<dt>X<span class="classifier">np.ndarray</span></dt><dd><p>A NumPy array representing the current states of the nodes in the network.</p>
+</dd>
+<dt>iteration<span class="classifier">np.ndarray</span></dt><dd><p>A NumPy array indicating the current iteration number of the simulation.</p>
+</dd>
+<dt>Tf<span class="classifier">np.ndarray</span></dt><dd><p>A NumPy array representing the current simulation time.</p>
+</dd>
+</dl>
+</section>
+<section id="description">
+<h2>Description:<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>This function samples the next event from the time structure, updates the corresponding node’s state, and adjusts the transition rates accordingly. It first identifies the node scheduled for the next event, updates its state using the information from <cite>model_matrices</cite>, and then modifies the rates in <cite>rate_arrays</cite> to reflect the state change.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.GEMFcore.sample_new_state">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.GEMFcore.</span></span><span class="sig-name descname"><span class="pre">sample_new_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_matrices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_arrays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampled_node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFcore.html#sample_new_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFcore.sample_new_state" title="Link to this definition"></a></dt>
+<dd><section id="samples-the-new-state-for-a-node-based-on-current-rates">
+<h2>Samples the new state for a node based on current rates.<a class="headerlink" href="#samples-the-new-state-for-a-node-based-on-current-rates" title="Link to this heading"></a></h2>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<p>int
+an integer in  {0,1,…,M}</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.GEMFcore.update_network">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.GEMFcore.</span></span><span class="sig-name descname"><span class="pre">update_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_matrices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_arrays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">networks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFcore.html#update_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFcore.update_network" title="Link to this definition"></a></dt>
+<dd><p>Cautious update approach: Updates affected neighbors after a node transitions.</p>
+<section id="id15">
+<h2>Parameters:<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>times<span class="classifier">TimeNP or TimeSorted</span></dt><dd><p>An object responsible for handling absolute times.</p>
+</dd>
+<dt>event_data<span class="classifier">EventData</span></dt><dd><p>An object that tracks node states before and after transitions.</p>
+</dd>
+<dt>model_matrices<span class="classifier">ModelMatrices</span></dt><dd><p>Contains the model matrices used in the GEMF framework.</p>
+</dd>
+<dt>rate_arrays<span class="classifier">RateArray</span></dt><dd><p>Arrays containing the transition rates for each node.</p>
+</dd>
+<dt>X<span class="classifier">np.ndarray</span></dt><dd><p>A NumPy array representing the current states of the nodes in the network.</p>
+</dd>
+<dt>iteration<span class="classifier">np.ndarray</span></dt><dd><p>A NumPy array indicating the current iteration number of the simulation.</p>
+</dd>
+<dt>Tf<span class="classifier">np.ndarray</span></dt><dd><p>A NumPy array representing the current simulation time.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h2>Description:<a class="headerlink" href="#id16" title="Link to this heading"></a></h2>
+<p>This function cautiously updates the network by first processing a node transition, then updating the rates of neighboring nodes that are affected by this transition. The method ensures that any changes in a node’s state are reflected in its neighbors’ transition rates, using the provided model matrices and rate arrays.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.GEMFcore.update_node_rate">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.GEMFcore.</span></span><span class="sig-name descname"><span class="pre">update_node_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_matrices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_arrays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_k_plus_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampled_node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFcore.html#update_node_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFcore.update_node_rate" title="Link to this definition"></a></dt>
+<dd><p>Updates the rate of transitions for a node based on its new state.</p>
+<section id="id17">
+<h2>Returns:<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>float</dt><dd><p>The updated transition rate for the node.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py class" id="module-fastgemf.GEMFsimulation">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.GEMFsimulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_structure_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'default_percentage':</span> <span class="pre">{'inducers':</span> <span class="pre">10,</span> <span class="pre">'other':</span> <span class="pre">90}}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'events':</span> <span class="pre">1000}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation" title="Link to this definition"></a></dt>
+<dd><p>The Simulation class represents a framework for epidemic modeling using GEMFcore.</p>
+<p>This class handles the initialization, configuration, and execution of simulations
+with customizable time structures, initial conditions, and stopping criteria. It allows
+running multiple simulations, extracting results, and plotting outcomes.</p>
+<section id="id18">
+<h2>Attributes:<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
+<dl>
+<dt>inst<span class="classifier">ModelConfiguration, optional</span></dt><dd><p>Instance of the model configuration that defines the epidemic model’s structure (compartments, transitions, etc.).
+If passing a YAML file, this parameter should not be provided.</p>
+</dd>
+<dt>time_structure_option<span class="classifier">str, optional, default is ‘Auto’</span></dt><dd><p>Specifies the data structure for managing absolute times (‘Auto’, ‘Array’, ‘SortedList’).</p>
+</dd>
+<dt>initial_condition<span class="classifier">dict, optional</span></dt><dd><p>Defines the initial state distribution, such as the percentage of inducers and others.
+There are four options for specifying the initial condition:</p>
+<ul class="simple">
+<li><p>‘percentage’: dict, Defines the percentage for each compartment. For example, in the SIS model: {‘I’: 5, ‘S’: 95}, which means 5% infected and 95% susceptible, randomly distributed.</p></li>
+<li><p>‘exact’: np.ndarray or list, Specifies the exact state of the system. Each element represents a node with a value between 0 and M.</p></li>
+<li><p>‘hubs_number’: dict, Randomly sets a specific number of hubs to a certain state. For example: {‘I’: 10} means 10 hubs are infected, and all others are susceptible.</p></li>
+</ul>
+<p>If passing a YAML file, this parameter should not be provided.</p>
+</dd>
+<dt>stop_condition<span class="classifier">dict, optional</span></dt><dd><p>Defines the condition that halts the simulation. The simulation stops if there are no more transitions (i.e., the sum of rates equals zero) or if user-defined conditions are met:</p>
+<ul class="simple">
+<li><p>“events”: int, Number of events to simulate, stopping when this threshold is reached. For example: 10000 events.</p></li>
+<li><p>“time”: float, Specifies the end time of the simulation. For example: 5.3 units of time.</p></li>
+</ul>
+<p>If passing a simulation YAML file, this parameter should not be provided.</p>
+</dd>
+<dt>nsim<span class="classifier">int, optional, default is 1</span></dt><dd><p>Number of simulation runs to perform.</p>
+</dd>
+</dl>
+</section>
+<section id="id19">
+<h2>Methods:<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>__init__(inst=None, time_structure_option=’Auto’, initial_condition=None, stop_condition=None, nsim=1):</dt><dd><p>Initializes the simulation with a model instance and configurations,
+based on either YAML files containing model and simulation information or the passed parameters (inst, initial_condition, and stop_condition).</p>
+</dd>
+<dt>initialize(inst=None, sim_cfg=None, time_generator_function=None, yaml=None):</dt><dd><p>Sets up the simulation environment using either a provided model instance or YAML configuration.</p>
+</dd>
+<dt>reset():</dt><dd><p>Resets the simulation by re-initializing it with the original user-defined settings.</p>
+</dd>
+<dt>_choose_method(time_structure):</dt><dd><p>Selects the method for generating time steps based on the chosen time structure option.
+Time steps can be handled using Numpy arrays or SortedList data structures.</p>
+</dd>
+<dt>forward():</dt><dd><p>Simulates one step ahead, updating the network state based on event sampling.</p>
+</dd>
+<dt>run_single_time():</dt><dd><p>Runs a single simulation until the stop condition is met.</p>
+</dd>
+<dt>run():</dt><dd><p>Runs multiple simulations (if specified) and stores the results.</p>
+</dd>
+<dt>from_yaml(cls, model_yaml, simulation_yaml):</dt><dd><p>Class method to create a Simulation instance from YAML configuration files.</p>
+</dd>
+<dt>get_results():</dt><dd><p>Extracts and returns the simulation results, including:
+- Absolute times (np.ndarray)
+- State population history (np.ndarray)
+- Interarrival times (np.ndarray)
+- The state from which a node transitioned at each event (np.ndarray)
+- The state to which a node transitioned at each event (np.ndarray)</p>
+</dd>
+<dt>stop_condition():</dt><dd><p>Checks if the simulation should terminate based on transition rates or custom stop conditions.</p>
+</dd>
+<dt>plot_results():</dt><dd><p>Plots the simulation results for either a single run or multiple runs, if applicable.</p>
+</dd>
+<dt>to_yaml(file_path):</dt><dd><p>Saves the simulation configuration to a YAML file for reproducibility and future use.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.from_yaml">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_yaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_yaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.from_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.from_yaml" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.get_results">
+<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.get_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.get_results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_cfg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_generator_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.initialize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.plot_results">
+<span class="sig-name descname"><span class="pre">plot_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.plot_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.plot_results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.reset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.run_signle_time">
+<span class="sig-name descname"><span class="pre">run_signle_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.run_signle_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.run_signle_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.stop_condition">
+<span class="sig-name descname"><span class="pre">stop_condition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.stop_condition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.stop_condition" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.GEMFsimulation.Simulation.to_yaml">
+<span class="sig-name descname"><span class="pre">to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/GEMFsimulation.html#Simulation.to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.GEMFsimulation.Simulation.to_yaml" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py function" id="module-fastgemf.initial_condition">
+<dt class="sig sig-object py" id="fastgemf.initial_condition.initial_condition_func">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.initial_condition.</span></span><span class="sig-name descname"><span class="pre">initial_condition_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_condition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/initial_condition.html#initial_condition_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.initial_condition.initial_condition_func" title="Link to this definition"></a></dt>
+<dd><p>Generates the initial conditions for nodes in the network based on the specified method in <cite>initial_condition</cite>.</p>
+<section id="id20">
+<h2>Parameters:<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>networks<span class="classifier">Network</span></dt><dd><p>The network object that defines the structure of the network layers.</p>
+</dd>
+<dt>inst<span class="classifier">ModelConfiguration</span></dt><dd><p>The ModelConfiguration instance that defines the compartments and transitions.</p>
+</dd>
+<dt>initial_condition<span class="classifier">dict</span></dt><dd><p>A dictionary specifying the method for initializing node states. Methods for the SIS model include:
+- ‘default_percentage’: {}
+Randomly assigns 10 percent of the population to the inducing state (e.g., 10 percent infected) and the remaining 90 percent equally and randomly to other states (e.g., 90 percent susceptible).
+- ‘percentage’: {‘I’: 5, ‘S’: 95}
+User-defined percentages for each compartment, assigning nodes randomly to states based on these percentages (e.g., 5 percent infected, 95 percent susceptible).
+- ‘hubs_number’: {‘I’: 10, ‘S’: 10}
+User-defined number of hubs (nodes with the most connections) to be assigned to specific states.
+- ‘exact’: x0
+Directly sets the initial state from an existing array <cite>x0</cite>.</p>
+</dd>
+<dt>counter<span class="classifier">int</span></dt><dd><p>A counter to track how many times the function has been called, used to prevent infinite recursion.</p>
+</dd>
+</dl>
+</section>
+<section id="id21">
+<h2>Returns:<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>x0<span class="classifier">np.ndarray</span></dt><dd><p>An N x M array representing the initial state of each node in the network, where each element is the
+compartment/state index for that node.</p>
+</dd>
+</dl>
+</section>
+<section id="id22">
+<h2>Description:<a class="headerlink" href="#id22" title="Link to this heading"></a></h2>
+<p>This function assigns initial states to nodes based on the selected method:
+- ‘default_percentage’: Randomly assigns 10% of the nodes to inducer compartments and 90% to others.
+- ‘percentage’: Distributes nodes into compartments according to user-defined percentages.
+- ‘hubs_number’: Places a fixed number of nodes into specific compartments, targeting nodes with the highest degree.
+- ‘exact’: Uses an existing array <cite>x0</cite> to directly set the initial state of each node.</p>
+<p>If an invalid method is provided, the function defaults to the ‘default_percentage’ method.</p>
+</section>
+<section id="raises">
+<h2>Raises:<a class="headerlink" href="#raises" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>ValueError:</dt><dd><p>Raised if the percentages provided in the ‘percentage’ method do not sum to 1 or 100.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py class" id="module-fastgemf.initializer">
+<dt class="sig sig-object py" id="fastgemf.initializer.EventData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.initializer.</span></span><span class="sig-name descname"><span class="pre">EventData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states_k:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states_k_plus_1:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampled_nodes:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_times:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/initializer.html#EventData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.initializer.EventData" title="Link to this definition"></a></dt>
+<dd><p>This class  stores event data during the simulation.</p>
+<section id="id23">
+<h2>Attributes:<a class="headerlink" href="#id23" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>states_k<span class="classifier">List[int]</span></dt><dd><p>the state of node sampled node before transition.</p>
+</dd>
+<dt>states_k_plus_1<span class="classifier">List[int]</span></dt><dd><p>the state of node sampled node after transition.</p>
+</dd>
+<dt>sampled_nodes<span class="classifier">List[int]</span></dt><dd><p>a list sampled nodes in each iteration.</p>
+</dd>
+<dt>min_times<span class="classifier">List[int]</span></dt><dd><p>List of absolute times at each event (minimum times when events occur).</p>
+</dd>
+</dl>
+</section>
+<section id="id24">
+<h2>Methods:<a class="headerlink" href="#id24" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>add_event(current_state, next_state, sampled_node, min_time):</dt><dd><p>Adds an event to the event data by recording the current and next states, the sampled node, and the event time.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.initializer.EventData.add_event">
+<span class="sig-name descname"><span class="pre">add_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampled_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/initializer.html#EventData.add_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.initializer.EventData.add_event" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.EventData.min_times">
+<span class="sig-name descname"><span class="pre">min_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#fastgemf.initializer.EventData.min_times" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.EventData.sampled_nodes">
+<span class="sig-name descname"><span class="pre">sampled_nodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#fastgemf.initializer.EventData.sampled_nodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.EventData.states_k">
+<span class="sig-name descname"><span class="pre">states_k</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#fastgemf.initializer.EventData.states_k" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.EventData.states_k_plus_1">
+<span class="sig-name descname"><span class="pre">states_k_plus_1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#fastgemf.initializer.EventData.states_k_plus_1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fastgemf.initializer.Initialize">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.initializer.</span></span><span class="sig-name descname"><span class="pre">Initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_inst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fastgemf.modelconfiguration.ModelConfiguration" title="fastgemf.modelconfiguration.ModelConfiguration"><span class="pre">ModelConfiguration</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_times_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/initializer.html#Initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.initializer.Initialize" title="Link to this definition"></a></dt>
+<dd><p>A class to initializing the simulation environment and preparing all necessary components
+such as event data, network structure, model matrices, and rate arrays.</p>
+<section id="id25">
+<h2>Attributes:<a class="headerlink" href="#id25" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>event_data<span class="classifier">EventData</span></dt><dd><p>Object that stores events occurring during the simulation.</p>
+</dd>
+<dt>networks<span class="classifier">Network</span></dt><dd><p>The network structure using CSR and CSC data structure for effecient search through network.</p>
+</dd>
+<dt>model_matrices<span class="classifier">ModelMatrices</span></dt><dd><p>Contains the GEMF matrices used in the simulation.</p>
+</dd>
+<dt>X0<span class="classifier">np.ndarray</span></dt><dd><p>N x M array, Initial state of all nodes, representing which compartment each node is in at the start.</p>
+</dd>
+<dt>X<span class="classifier">np.ndarray</span></dt><dd><p>A copy of the initial state <cite>X0</cite> used to keep track of the current states during the simulation.</p>
+</dd>
+<dt>rate_arrays<span class="classifier">RateArray</span></dt><dd><p>Stores node transition rates related values.</p>
+</dd>
+<dt>times<span class="classifier">np.ndarray</span></dt><dd><p>absolute times of nodes.</p>
+</dd>
+<dt>iteration<span class="classifier">np.ndarray</span></dt><dd><p>counting the number of events.</p>
+</dd>
+<dt>stop_condition<span class="classifier">dict</span></dt><dd><p>Condition that defines when the simulation should stop, such as the number of events or a time limit.</p>
+</dd>
+<dt>Tf<span class="classifier">np.ndarray</span></dt><dd><p>Final simulation time.</p>
+</dd>
+</dl>
+</section>
+<section id="id26">
+<h2>Methods:<a class="headerlink" href="#id26" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>__init__(model_inst, sim_cfg, generate_times_func, counter):</dt><dd><p>Initializes the simulation environment by setting up event data, networks, model matrices,
+initial conditions, and rate arrays. Time steps are generated based on the chosen method.</p>
+</dd>
+<dt>_get_networks(model_inst):</dt><dd><p>Retrieves network data either from file paths or directly from pre-defined environment objects</p>
+</dd>
+<dt>_get_rates(model_inst, X, net, model_matrices, initial_inf_nodes=None):</dt><dd><p>Computes transition rates for nodes and interactions based on the current state of the network
+and model matrices.</p>
+</dd>
+<dt>_get_modified_rates(cfg):</dt><dd><p>Modifies and returns the model matrices used for transitions and rates based on the configuration.</p>
+</dd>
+<dt>_initial_condition(model_inst, sim_cfg, counter):</dt><dd><p>Sets up the initial condition for the node states based on the network and model configuration.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.initializer.</span></span><span class="sig-name descname"><span class="pre">ModelMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bil</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A_delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">di</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layers_infuencer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/initializer.html#ModelMatrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.initializer.ModelMatrices" title="Link to this definition"></a></dt>
+<dd><p>this class store the GEMF matrices used in the simulation.</p>
+<section id="id27">
+<h2>Attributes:<a class="headerlink" href="#id27" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>A_beta<span class="classifier">np.ndarray</span></dt><dd><p>Edge-based transititon adjacency matrix</p>
+</dd>
+<dt>bi<span class="classifier">np.ndarray</span></dt><dd><p>M x M x L</p>
+</dd>
+<dt>bil<span class="classifier">np.ndarray</span></dt><dd><p>M x L array, the sum of A_beta rows for each state.</p>
+</dd>
+<dt>A_delta<span class="classifier">np.ndarray</span></dt><dd><p>Node-based adjaceny matrix</p>
+</dd>
+<dt>di<span class="classifier">np.ndarray</span></dt><dd><p>The sum of the node-based rates</p>
+</dd>
+<dt>q , layers_infuencer<span class="classifier">Dict</span></dt><dd><p>mapping influencers to layers and vice versa</p>
+</dd>
+<dt>L<span class="classifier">int</span></dt><dd><p>Number of layers.</p>
+</dd>
+<dt>M<span class="classifier">int</span></dt><dd><p>Number of compartments.</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h2>Methods:<a class="headerlink" href="#id28" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>from_instant(cls, cfg, get_model_arrays_func):</dt><dd><p>Factory method to create ModelMatrices instance using ModelConfiguration instance that user has defined for it mechansitic model.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.A_beta">
+<span class="sig-name descname"><span class="pre">A_beta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.A_beta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.A_delta">
+<span class="sig-name descname"><span class="pre">A_delta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.A_delta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.L">
+<span class="sig-name descname"><span class="pre">L</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.L" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.M">
+<span class="sig-name descname"><span class="pre">M</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.M" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.bi">
+<span class="sig-name descname"><span class="pre">bi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.bi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.bil">
+<span class="sig-name descname"><span class="pre">bil</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.bil" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.di">
+<span class="sig-name descname"><span class="pre">di</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.di" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.from_instant">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_instant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_model_arrays_func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/initializer.html#ModelMatrices.from_instant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.from_instant" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.layers_infuencer">
+<span class="sig-name descname"><span class="pre">layers_infuencer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.layers_infuencer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.ModelMatrices.q">
+<span class="sig-name descname"><span class="pre">q</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#fastgemf.initializer.ModelMatrices.q" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fastgemf.initializer.RateArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.initializer.</span></span><span class="sig-name descname"><span class="pre">RateArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/initializer.html#RateArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.initializer.RateArray" title="Link to this definition"></a></dt>
+<dd><p>A class to store and manage the rate arrays used in the simulation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-----------</span></span></dt>
+<dd></dd></dl>
+
+<dl class="simple">
+<dt>Nq<span class="classifier">np.ndarray</span></dt><dd><p>N x L array, storing sum of link weights of influencing neighbors.</p>
+</dd>
+<dt>Rn<span class="classifier">np.ndarray</span></dt><dd><p>1D array of node rates, representing the transition rates for each node.</p>
+</dd>
+<dt>R<span class="classifier">float</span></dt><dd><p>The total rate of events in the system, calculated as the sum of the node rates.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">--------</span></span></dt>
+<dd></dd></dl>
+
+<dl class="simple">
+<dt>from_instant(cls, cfg, X, networks, model_matrices, get_rates_func):</dt><dd><p>A factory method to create a <cite>RateArray</cite> instance by calculating rates using a given configuration,
+node states, network structure, and model matrices.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.RateArray.Nq">
+<span class="sig-name descname"><span class="pre">Nq</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fastgemf.initializer.RateArray.Nq" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.RateArray.R">
+<span class="sig-name descname"><span class="pre">R</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fastgemf.initializer.RateArray.R" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fastgemf.initializer.RateArray.Rn">
+<span class="sig-name descname"><span class="pre">Rn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fastgemf.initializer.RateArray.Rn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.initializer.RateArray.from_instant">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_instant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">networks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fastgemf.network.Network" title="fastgemf.network.Network"><span class="pre">Network</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_matrices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fastgemf.initializer.ModelMatrices" title="fastgemf.initializer.ModelMatrices"><span class="pre">ModelMatrices</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_rates_func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/initializer.html#RateArray.from_instant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.initializer.RateArray.from_instant" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-fastgemf.network">
+<dt class="sig sig-object py" id="fastgemf.network.Network">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastgemf.network.</span></span><span class="sig-name descname"><span class="pre">Network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mats</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/network.html#Network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.network.Network" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.network.Network.get_highest_degree_nodes">
+<span class="sig-name descname"><span class="pre">get_highest_degree_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/network.html#Network.get_highest_degree_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.network.Network.get_highest_degree_nodes" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Returns the <cite>m</cite> highest degree nodes in layer <cite>l</cite> of the network.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>l (int): The index of the layer (0-indexed).
+m (int): The number of top degree nodes to return.</p>
+</dd>
+<dt>Returns:</dt><dd><p>numpy.ndarray: An array of the <cite>m</cite> highest degree nodes in layer <cite>l</cite>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Warning: In large networks, this inilization can significantly increase the running time. It requires sorting all node degrees.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.network.Network.get_in_neighbors">
+<span class="sig-name descname"><span class="pre">get_in_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/network.html#Network.get_in_neighbors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.network.Network.get_in_neighbors" title="Link to this definition"></a></dt>
+<dd><p>Get the incoming neighbors of a node in layer l.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l</strong> (<em>int</em>) – Layer index.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Node index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Indices of nodes connected by incoming edges to node n.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.network.Network.get_in_weight">
+<span class="sig-name descname"><span class="pre">get_in_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/network.html#Network.get_in_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.network.Network.get_in_weight" title="Link to this definition"></a></dt>
+<dd><p>Get the weights of incoming edges to a node in layer l.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l</strong> (<em>int</em>) – Layer index.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Node index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Weights of the incoming edges to node n.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.network.Network.get_out_neighbors">
+<span class="sig-name descname"><span class="pre">get_out_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/network.html#Network.get_out_neighbors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.network.Network.get_out_neighbors" title="Link to this definition"></a></dt>
+<dd><p>Get the outgoing neighbors of a node in layer l.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l</strong> (<em>int</em>) – Layer index.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Node index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Indices of nodes connected by outgoing edges from node n.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fastgemf.network.Network.get_out_weight">
+<span class="sig-name descname"><span class="pre">get_out_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/network.html#Network.get_out_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.network.Network.get_out_weight" title="Link to this definition"></a></dt>
+<dd><p>Get the weights of outgoing edges from a node in layer l.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l</strong> (<em>int</em>) – Layer index.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Node index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Weights of the outgoing edges from node n.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.network.edgelist_to_csr">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.network.</span></span><span class="sig-name descname"><span class="pre">edgelist_to_csr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/network.html#edgelist_to_csr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.network.edgelist_to_csr" title="Link to this definition"></a></dt>
+<dd><p>Converts an edge list from a file to a CSR matrix using NetworkX library functions.</p>
+<p>Parameters:
+file_path (str): Path to the file containing the edge list.
+directed (bool): Whether the graph is directed or not.</p>
+<p>Returns:
+scipy.sparse.csr_matrix: CSR matrix representation of the graph.</p>
+</dd></dl>
+
+<dl class="py function" id="module-fastgemf.post_population">
+<dt class="sig sig-object py" id="fastgemf.post_population.post_population">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.post_population.</span></span><span class="sig-name descname"><span class="pre">post_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_matrices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/post_population.html#post_population"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.post_population.post_population" title="Link to this definition"></a></dt>
+<dd><p>The post_population caclulcates the evolution of state through the total time of simulation.</p>
+<section id="id29">
+<h2>Parameters:<a class="headerlink" href="#id29" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>x0<span class="classifier">np.ndarray</span></dt><dd><p>The initial state of network</p>
+</dd>
+<dt>model_matrices<span class="classifier">ModelMatrices</span></dt><dd><p>A_beta, A_delta, q, b_l, b_il, etc</p>
+</dd>
+<dt>event_data<span class="classifier">EventData</span></dt><dd><p>Contains the information about event times(min_time) and state transitions (states_k and states_k_plus_1) and sampled nodes in each iteration</p>
+</dd>
+<dt>nodes<span class="classifier">int</span></dt><dd><p>Total number of nodes in the network.</p>
+</dd>
+</dl>
+</section>
+<section id="id30">
+<h2>Returns:<a class="headerlink" href="#id30" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>time<span class="classifier">np.array</span></dt><dd><p>absolute times</p>
+</dd>
+<dt>StateCount<span class="classifier">np.ndarray</span></dt><dd><p>An M x T array (M compartments, T time steps), where each element represents the number of
+nodes in each compartment at each time step.</p>
+</dd>
+<dt>ts<span class="classifier">np.ndarray</span></dt><dd><p>interarrival times</p>
+</dd>
+<dt>states_k<span class="classifier">np.ndarray</span></dt><dd><p>The compartment states before each event (states_k).</p>
+</dd>
+<dt>states_k_plus_1<span class="classifier">np.ndarray</span></dt><dd><p>The compartment states after each event (states_k_plus_1).</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function" id="module-fastgemf.stop_conditions">
+<dt class="sig sig-object py" id="fastgemf.stop_conditions.stop_cond">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.stop_conditions.</span></span><span class="sig-name descname"><span class="pre">stop_cond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/stop_conditions.html#stop_cond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.stop_conditions.stop_cond" title="Link to this definition"></a></dt>
+<dd><p>Determines if the simulation should stop based on the user-defined stopping condition.</p>
+<section id="id31">
+<h2>Parameters:<a class="headerlink" href="#id31" title="Link to this heading"></a></h2>
+<p>setup : SimulationSetu</p>
+</section>
+<section id="id32">
+<h2>Returns:<a class="headerlink" href="#id32" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>bool</dt><dd><p>True if the stop condition is met, otherwise False.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function" id="module-fastgemf.utils">
+<dt class="sig sig-object py" id="fastgemf.utils.extract_transition_parameters">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.utils.</span></span><span class="sig-name descname"><span class="pre">extract_transition_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/utils.html#extract_transition_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.utils.extract_transition_parameters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.utils.find_key_for_value">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.utils.</span></span><span class="sig-name descname"><span class="pre">find_key_for_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/utils.html#find_key_for_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.utils.find_key_for_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.utils.invert_influence_dict">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.utils.</span></span><span class="sig-name descname"><span class="pre">invert_influence_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">influence_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/utils.html#invert_influence_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.utils.invert_influence_dict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.utils.pick_fastest_method">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.utils.</span></span><span class="sig-name descname"><span class="pre">pick_fastest_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/utils.html#pick_fastest_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.utils.pick_fastest_method" title="Link to this definition"></a></dt>
+<dd><p>nodes_norm = nodes / 1000000
+edges_norm = edges / (nodes * 10)</p>
+<dl class="simple">
+<dt>def f1(x, y):</dt><dd><p>return 0.5 / (1 + np.exp(10 * (x - 0.2))) * (1 / (1 + np.exp(5 * y - 2.5)))</p>
+</dd>
+<dt>def f2(x, y):</dt><dd><p>return 0.5 + 0.5 / (1 + np.exp(-10 * (x - 0.2))) * (1 - 1 / (1 + np.exp(5 * y - 2.5)))</p>
+</dd>
+</dl>
+<p>result = f1(nodes_norm, edges_norm) if nodes &lt; 200000 else f2(nodes_norm, edges_norm)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.utils.sample">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.utils.</span></span><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/utils.html#sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.utils.sample" title="Link to this definition"></a></dt>
+<dd><p>Draw a random variable from a discrete distribution defined by ‘probability’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>probability</strong> (<em>list</em><em> or </em><em>np.array</em>) – A list or array of probabilities associated
+with each state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.utils.setup_simulation_matrices">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.utils.</span></span><span class="sig-name descname"><span class="pre">setup_simulation_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/utils.html#setup_simulation_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.utils.setup_simulation_matrices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function" id="module-fastgemf.visualization">
+<dt class="sig sig-object py" id="fastgemf.visualization.draw_model_graph">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.visualization.</span></span><span class="sig-name descname"><span class="pre">draw_model_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/visualization.html#draw_model_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.visualization.draw_model_graph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.visualization.extend_to_max_length">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.visualization.</span></span><span class="sig-name descname"><span class="pre">extend_to_max_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/visualization.html#extend_to_max_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.visualization.extend_to_max_length" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.visualization.plot_multiple_results">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_multiple_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compartments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'serif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/visualization.html#plot_multiple_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.visualization.plot_multiple_results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fastgemf.visualization.plot_results">
+<span class="sig-prename descclassname"><span class="pre">fastgemf.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">StateCount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compartments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_styles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['-',</span> <span class="pre">'--',</span> <span class="pre">':']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'serif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastgemf/visualization.html#plot_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastgemf.visualization.plot_results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Hossein Samaei.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

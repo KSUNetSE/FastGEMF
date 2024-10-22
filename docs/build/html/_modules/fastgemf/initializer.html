@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fastgemf.initializer &mdash; FastGEMF v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fa47ad08"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FastGEMF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FastGEMF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fastgemf.initializer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fastgemf.initializer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span>  <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span>  <span class="n">pick_fastest_method</span>
+<span class="kn">from</span> <span class="nn">.network</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">.initial_condition</span> <span class="kn">import</span> <span class="n">initial_condition_func</span>
+<span class="kn">from</span> <span class="nn">.times_structure</span> <span class="kn">import</span> <span class="n">TimeSorted</span><span class="p">,</span><span class="n">TimeNp</span>
+<span class="kn">from</span> <span class="nn">.modelconfiguration</span> <span class="kn">import</span> <span class="n">ModelConfiguration</span>
+<span class="kn">from</span>  <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span>  <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">.stop_conditions</span> <span class="kn">import</span> <span class="n">stop_cond</span>
+
+<div class="viewcode-block" id="EventData">
+<a class="viewcode-back" href="../../index.html#fastgemf.initializer.EventData">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EventData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class  stores event data during the simulation.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    states_k : List[int]</span>
+<span class="sd">        the state of node sampled node before transition.</span>
+
+<span class="sd">    states_k_plus_1 : List[int]</span>
+<span class="sd">        the state of node sampled node after transition.</span>
+
+<span class="sd">    sampled_nodes : List[int]</span>
+<span class="sd">        a list sampled nodes in each iteration.</span>
+
+<span class="sd">    min_times : List[int]</span>
+<span class="sd">        List of absolute times at each event (minimum times when events occur).</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    add_event(current_state, next_state, sampled_node, min_time):</span>
+<span class="sd">        Adds an event to the event data by recording the current and next states, the sampled node, and the event time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">states_k</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">states_k_plus_1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">sampled_nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">min_times</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EventData.add_event">
+<a class="viewcode-back" href="../../index.html#fastgemf.initializer.EventData.add_event">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_state</span><span class="p">,</span> <span class="n">next_state</span><span class="p">,</span> <span class="n">sampled_node</span><span class="p">,</span> <span class="n">min_time</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_k_plus_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampled_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">min_time</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ModelMatrices">
+<a class="viewcode-back" href="../../index.html#fastgemf.initializer.ModelMatrices">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ModelMatrices</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this class store the GEMF matrices used in the simulation.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    A_beta : np.ndarray</span>
+<span class="sd">        Edge-based transititon adjacency matrix</span>
+<span class="sd">    bi : np.ndarray</span>
+<span class="sd">        M x M x L</span>
+<span class="sd">    bil : np.ndarray</span>
+<span class="sd">        M x L array, the sum of A_beta rows for each state.</span>
+<span class="sd">    A_delta : np.ndarray</span>
+<span class="sd">        Node-based adjaceny matrix</span>
+<span class="sd">    di : np.ndarray</span>
+<span class="sd">        The sum of the node-based rates</span>
+<span class="sd">    q , layers_infuencer : Dict</span>
+<span class="sd">        mapping influencers to layers and vice versa</span>
+<span class="sd">    L : int</span>
+<span class="sd">        Number of layers.</span>
+<span class="sd">    M : int</span>
+<span class="sd">        Number of compartments.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    from_instant(cls, cfg, get_model_arrays_func):</span>
+<span class="sd">        Factory method to create ModelMatrices instance using ModelConfiguration instance that user has defined for it mechansitic model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">A_beta</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+        <span class="n">bi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="c1"># M x M x L</span>
+        <span class="n">bil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="c1"># M x L array, each col. is sum of A_beta rows for that layyer</span>
+        <span class="n">A_delta</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+        <span class="n">di</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="c1"># M    sum of the A_dela rows</span>
+        <span class="n">q</span><span class="p">:</span> <span class="n">Dict</span>                <span class="c1"># key: influencer, Value: layer</span>
+        <span class="n">layers_infuencer</span><span class="p">:</span> <span class="n">Dict</span> <span class="c1"># key: layer, Value: influencer</span>
+        <span class="n">L</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">M</span><span class="p">:</span> <span class="nb">int</span>
+
+<div class="viewcode-block" id="ModelMatrices.from_instant">
+<a class="viewcode-back" href="../../index.html#fastgemf.initializer.ModelMatrices.from_instant">[docs]</a>
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">from_instant</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">get_model_arrays_func</span><span class="p">):</span>
+                <span class="n">A_beta</span><span class="p">,</span> <span class="n">bi</span><span class="p">,</span> <span class="n">bil</span><span class="p">,</span> <span class="n">A_delta</span><span class="p">,</span> <span class="n">di</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span><span class="n">layers_infuencer</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">get_model_arrays_func</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">A_beta</span><span class="o">=</span><span class="n">A_beta</span><span class="p">,</span> <span class="n">bi</span><span class="o">=</span><span class="n">bi</span><span class="p">,</span><span class="n">bil</span><span class="o">=</span><span class="n">bil</span><span class="p">,</span> <span class="n">A_delta</span><span class="o">=</span><span class="n">A_delta</span><span class="p">,</span><span class="n">di</span><span class="o">=</span><span class="n">di</span><span class="p">,</span>
+                <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">layers_infuencer</span><span class="o">=</span><span class="n">layers_infuencer</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="n">M</span> <span class="p">)</span></div>
+</div>
+
+        
+<div class="viewcode-block" id="RateArray">
+<a class="viewcode-back" href="../../index.html#fastgemf.initializer.RateArray">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">RateArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to store and manage the rate arrays used in the simulation.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        -----------</span>
+<span class="sd">    Nq : np.ndarray</span>
+<span class="sd">        N x L array, storing sum of link weights of influencing neighbors.</span>
+
+<span class="sd">    Rn : np.ndarray</span>
+<span class="sd">        1D array of node rates, representing the transition rates for each node.</span>
+
+<span class="sd">    R : float</span>
+<span class="sd">        The total rate of events in the system, calculated as the sum of the node rates.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        --------</span>
+<span class="sd">    from_instant(cls, cfg, X, networks, model_matrices, get_rates_func):</span>
+<span class="sd">        A factory method to create a `RateArray` instance by calculating rates using a given configuration,</span>
+<span class="sd">        node states, network structure, and model matrices.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Nq</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># N x L, Sum of  (Weights*Edge_interaction_rate) for eah node at each layer</span>
+        <span class="n">Rn</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># Node rates</span>
+        <span class="n">R</span><span class="p">:</span> <span class="nb">float</span>        <span class="c1"># Total rate</span>
+
+<div class="viewcode-block" id="RateArray.from_instant">
+<a class="viewcode-back" href="../../index.html#fastgemf.initializer.RateArray.from_instant">[docs]</a>
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">from_instant</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">networks</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span><span class="n">model_matrices</span><span class="p">:</span> <span class="n">ModelMatrices</span><span class="p">,</span>  <span class="n">get_rates_func</span><span class="p">):</span>
+                <span class="n">Nq</span><span class="p">,</span> <span class="n">Rn</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">get_rates_func</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">networks</span><span class="p">,</span><span class="n">model_matrices</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">Nq</span><span class="o">=</span><span class="n">Nq</span><span class="p">,</span> <span class="n">Rn</span><span class="o">=</span><span class="n">Rn</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">)</span></div>
+</div>
+
+    
+
+<div class="viewcode-block" id="Initialize">
+<a class="viewcode-back" href="../../index.html#fastgemf.initializer.Initialize">[docs]</a>
+<span class="k">class</span> <span class="nc">Initialize</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to initializing the simulation environment and preparing all necessary components </span>
+<span class="sd">    such as event data, network structure, model matrices, and rate arrays.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    event_data : EventData</span>
+<span class="sd">        Object that stores events occurring during the simulation.</span>
+
+<span class="sd">    networks : Network</span>
+<span class="sd">        The network structure using CSR and CSC data structure for effecient search through network.</span>
+
+<span class="sd">    model_matrices : ModelMatrices</span>
+<span class="sd">        Contains the GEMF matrices used in the simulation.</span>
+
+<span class="sd">    X0 : np.ndarray </span>
+<span class="sd">        N x M array, Initial state of all nodes, representing which compartment each node is in at the start.</span>
+
+<span class="sd">    X : np.ndarray</span>
+<span class="sd">        A copy of the initial state `X0` used to keep track of the current states during the simulation.</span>
+
+<span class="sd">    rate_arrays : RateArray</span>
+<span class="sd">        Stores node transition rates related values.</span>
+
+<span class="sd">    times : np.ndarray</span>
+<span class="sd">       absolute times of nodes.</span>
+
+<span class="sd">    iteration : np.ndarray</span>
+<span class="sd">        counting the number of events.</span>
+
+<span class="sd">    stop_condition : dict</span>
+<span class="sd">        Condition that defines when the simulation should stop, such as the number of events or a time limit.</span>
+
+<span class="sd">    Tf : np.ndarray</span>
+<span class="sd">        Final simulation time.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    __init__(model_inst, sim_cfg, generate_times_func, counter):</span>
+<span class="sd">        Initializes the simulation environment by setting up event data, networks, model matrices,</span>
+<span class="sd">        initial conditions, and rate arrays. Time steps are generated based on the chosen method.</span>
+<span class="sd">    </span>
+<span class="sd">    _get_networks(model_inst):</span>
+<span class="sd">        Retrieves network data either from file paths or directly from pre-defined environment objects</span>
+
+<span class="sd">    _get_rates(model_inst, X, net, model_matrices, initial_inf_nodes=None):</span>
+<span class="sd">        Computes transition rates for nodes and interactions based on the current state of the network </span>
+<span class="sd">        and model matrices.</span>
+
+<span class="sd">    _get_modified_rates(cfg):</span>
+<span class="sd">        Modifies and returns the model matrices used for transitions and rates based on the configuration.</span>
+
+<span class="sd">    _initial_condition(model_inst, sim_cfg, counter):</span>
+<span class="sd">        Sets up the initial condition for the node states based on the network and model configuration.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_inst</span><span class="p">:</span><span class="n">ModelConfiguration</span><span class="p">,</span> <span class="n">sim_cfg</span><span class="p">,</span> <span class="n">generate_times_func</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span> <span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">event_data</span><span class="o">=</span><span class="n">EventData</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">networks</span><span class="o">=</span><span class="n">Network</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_networks</span><span class="p">(</span><span class="n">model_inst</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model_matrices</span><span class="o">=</span><span class="n">ModelMatrices</span><span class="o">.</span><span class="n">from_instant</span><span class="p">(</span><span class="n">model_inst</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_modified_rates</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">X0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_condtion</span><span class="p">(</span><span class="n">model_inst</span><span class="p">,</span> <span class="n">sim_cfg</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rate_arrays</span><span class="o">=</span><span class="n">RateArray</span><span class="o">.</span><span class="n">from_instant</span><span class="p">(</span><span class="n">model_inst</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">networks</span><span class="p">,</span>
+                                                         <span class="bp">self</span><span class="o">.</span><span class="n">model_matrices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rates</span><span class="p">)</span>
+        
+                <span class="k">if</span> <span class="n">generate_times_func</span><span class="p">:</span> 
+                        <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">=</span><span class="n">generate_times_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rate_arrays</span><span class="o">.</span><span class="n">Rn</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                        <span class="n">generate_times_func</span><span class="o">=</span><span class="n">pick_fastest_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> 
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>  
+                        <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">=</span><span class="n">generate_times_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rate_arrays</span><span class="o">.</span><span class="n">Rn</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop_condition</span><span class="o">=</span> <span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;stop_condition&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Tf</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+                
+                
+ 
+
+        <span class="k">def</span> <span class="nf">_get_networks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model_inst</span><span class="p">):</span>
+               <span class="k">if</span>  <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_inst</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="nb">str</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">load_npz</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span>  <span class="n">model_inst</span><span class="o">.</span><span class="n">network_directories</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+               <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="p">[</span><span class="n">network</span> <span class="k">for</span> <span class="n">network</span> <span class="ow">in</span> <span class="n">model_inst</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+
+        <span class="k">def</span> <span class="nf">_get_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model_inst</span><span class="p">,</span><span class="n">X</span><span class="p">,</span> <span class="n">net</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">model_matrices</span><span class="p">:</span> <span class="n">ModelMatrices</span><span class="p">,</span> <span class="n">initial_inf_nodes</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+                <span class="n">L</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span> <span class="n">model_matrices</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">model_matrices</span><span class="o">.</span><span class="n">q</span>
+                <span class="n">N</span><span class="o">=</span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span>
+                <span class="n">di</span><span class="p">,</span> <span class="n">bil</span><span class="o">=</span><span class="n">model_matrices</span><span class="o">.</span><span class="n">di</span><span class="p">,</span> <span class="n">model_matrices</span><span class="o">.</span><span class="n">bil</span>
+                <span class="n">Nq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>       
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+                                <span class="n">influencers</span><span class="o">=</span><span class="n">model_matrices</span><span class="o">.</span><span class="n">layers_infuencer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">influencer</span> <span class="ow">in</span> <span class="n">influencers</span><span class="p">:</span> 
+                                        <span class="n">Nln</span><span class="o">=</span><span class="n">net</span><span class="o">.</span><span class="n">get_in_neighbors</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+                                        <span class="n">weights</span><span class="o">=</span><span class="n">net</span><span class="o">.</span><span class="n">get_in_weight</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+                                        <span class="n">Nq</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">]</span><span class="o">+=</span><span class="nb">sum</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">Nln</span><span class="p">]</span><span class="o">==</span><span class="n">influencer</span><span class="p">))</span><span class="o">*</span> <span class="n">weights</span><span class="p">)</span>
+                <span class="n">Rn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+                <span class="n">Rn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">di</span><span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">bil</span><span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="p">:],</span> <span class="n">Nq</span><span class="p">[:,</span> <span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span>
+                <span class="n">R</span><span class="o">=</span><span class="n">Rn</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>        
+                <span class="k">return</span>  <span class="n">Nq</span><span class="p">,</span> <span class="n">Rn</span><span class="p">,</span> <span class="n">R</span>       
+
+
+        <span class="k">def</span> <span class="nf">_get_modified_rates</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cfg</span><span class="p">):</span>
+                <span class="n">cfg</span><span class="o">.</span><span class="n">_get_GEMF_matrices</span><span class="p">()</span>
+                <span class="n">di</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">A_delta</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+                <span class="n">layers_infuencer</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">layers_infuencer</span>
+                <span class="n">bil</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">A_beta</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+                <span class="n">bi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">L</span> <span class="p">))</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
+                                <span class="n">bi</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">A_beta</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">i</span><span class="p">,:]</span>
+                <span class="k">return</span> <span class="n">cfg</span><span class="o">.</span><span class="n">A_beta</span><span class="p">,</span> <span class="n">bi</span><span class="p">,</span> <span class="n">bil</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">A_delta</span><span class="p">,</span><span class="n">di</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">q</span><span class="p">,</span><span class="n">layers_infuencer</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M</span> 
+
+
+        <span class="k">def</span> <span class="nf">_initial_condtion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model_inst</span><span class="p">,</span> <span class="n">sim_cfg</span><span class="p">,</span> <span class="n">counter</span><span class="p">):</span>
+                <span class="n">X0</span><span class="o">=</span> <span class="n">initial_condition_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">networks</span><span class="p">,</span> <span class="n">model_inst</span><span class="p">,</span> 
+                                              <span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;initial_condition&#39;</span><span class="p">],</span> <span class="n">counter</span><span class="p">)</span>
+                <span class="n">counter</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="k">return</span> <span class="n">X0</span></div>
+
+                
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Hossein Samaei.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

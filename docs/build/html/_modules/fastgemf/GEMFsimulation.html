@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fastgemf.GEMFsimulation &mdash; FastGEMF v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fa47ad08"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FastGEMF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FastGEMF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fastgemf.GEMFsimulation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fastgemf.GEMFsimulation</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span>  <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">yaml</span> 
+<span class="kn">from</span> <span class="nn">.error</span> <span class="kn">import</span> <span class="n">StopLoopException</span> 
+<span class="kn">from</span> <span class="nn">.times_structure</span> <span class="kn">import</span> <span class="n">TimeSorted</span><span class="p">,</span><span class="n">TimeNp</span>
+<span class="kn">from</span> <span class="nn">.post_population</span> <span class="kn">import</span> <span class="n">post_population</span>
+<span class="kn">from</span> <span class="nn">.initializer</span> <span class="kn">import</span> <span class="n">Initialize</span>
+<span class="kn">from</span> <span class="nn">.modelconfiguration</span> <span class="kn">import</span> <span class="n">ModelConfiguration</span>
+<span class="kn">from</span> <span class="nn">.GEMFcore</span> <span class="kn">import</span> <span class="n">sample_event</span><span class="p">,</span> <span class="n">update_network</span>
+<span class="kn">from</span> <span class="nn">.stop_conditions</span> <span class="kn">import</span> <span class="n">stop_cond</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">.visualization</span> <span class="kn">import</span>  <span class="n">plot_multiple_results</span><span class="p">,</span><span class="n">plot_results</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+
+
+    
+
+<div class="viewcode-block" id="Simulation">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation">[docs]</a>
+<span class="k">class</span> <span class="nc">Simulation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Simulation class represents a framework for epidemic modeling using GEMFcore.</span>
+
+<span class="sd">    This class handles the initialization, configuration, and execution of simulations</span>
+<span class="sd">    with customizable time structures, initial conditions, and stopping criteria. It allows</span>
+<span class="sd">    running multiple simulations, extracting results, and plotting outcomes.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    inst : ModelConfiguration, optional</span>
+<span class="sd">        Instance of the model configuration that defines the epidemic model&#39;s structure (compartments, transitions, etc.).</span>
+<span class="sd">        If passing a YAML file, this parameter should not be provided.</span>
+<span class="sd">    time_structure_option : str, optional, default is &#39;Auto&#39;</span>
+<span class="sd">        Specifies the data structure for managing absolute times (&#39;Auto&#39;, &#39;Array&#39;, &#39;SortedList&#39;).</span>
+<span class="sd">    initial_condition : dict, optional</span>
+<span class="sd">        Defines the initial state distribution, such as the percentage of inducers and others.</span>
+<span class="sd">        There are four options for specifying the initial condition:</span>
+<span class="sd">        </span>
+<span class="sd">        - &#39;percentage&#39;: dict, Defines the percentage for each compartment. For example, in the SIS model: {&#39;I&#39;: 5, &#39;S&#39;: 95}, which means 5% infected and 95% susceptible, randomly distributed.</span>
+<span class="sd">        - &#39;exact&#39;: np.ndarray or list, Specifies the exact state of the system. Each element represents a node with a value between 0 and M.</span>
+<span class="sd">        - &#39;hubs_number&#39;: dict, Randomly sets a specific number of hubs to a certain state. For example: {&#39;I&#39;: 10} means 10 hubs are infected, and all others are susceptible.</span>
+<span class="sd">        </span>
+<span class="sd">        If passing a YAML file, this parameter should not be provided.</span>
+<span class="sd">    stop_condition : dict, optional</span>
+<span class="sd">        Defines the condition that halts the simulation. The simulation stops if there are no more transitions (i.e., the sum of rates equals zero) or if user-defined conditions are met:</span>
+<span class="sd">        </span>
+<span class="sd">        - &quot;events&quot;: int, Number of events to simulate, stopping when this threshold is reached. For example: 10000 events.</span>
+<span class="sd">        - &quot;time&quot;: float, Specifies the end time of the simulation. For example: 5.3 units of time.</span>
+<span class="sd">        </span>
+<span class="sd">        If passing a simulation YAML file, this parameter should not be provided.</span>
+<span class="sd">    nsim : int, optional, default is 1</span>
+<span class="sd">        Number of simulation runs to perform.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    __init__(inst=None, time_structure_option=&#39;Auto&#39;, initial_condition=None, stop_condition=None, nsim=1):</span>
+<span class="sd">        Initializes the simulation with a model instance and configurations, </span>
+<span class="sd">        based on either YAML files containing model and simulation information or the passed parameters (inst, initial_condition, and stop_condition).</span>
+
+<span class="sd">    initialize(inst=None, sim_cfg=None, time_generator_function=None, yaml=None):</span>
+<span class="sd">        Sets up the simulation environment using either a provided model instance or YAML configuration.</span>
+
+<span class="sd">    reset():</span>
+<span class="sd">        Resets the simulation by re-initializing it with the original user-defined settings.</span>
+
+<span class="sd">    _choose_method(time_structure):</span>
+<span class="sd">        Selects the method for generating time steps based on the chosen time structure option.</span>
+<span class="sd">        Time steps can be handled using Numpy arrays or SortedList data structures.</span>
+
+<span class="sd">    forward():</span>
+<span class="sd">        Simulates one step ahead, updating the network state based on event sampling.</span>
+
+<span class="sd">    run_single_time():</span>
+<span class="sd">        Runs a single simulation until the stop condition is met.</span>
+
+<span class="sd">    run():</span>
+<span class="sd">        Runs multiple simulations (if specified) and stores the results.</span>
+
+<span class="sd">    from_yaml(cls, model_yaml, simulation_yaml):</span>
+<span class="sd">        Class method to create a Simulation instance from YAML configuration files.</span>
+
+<span class="sd">    get_results():</span>
+<span class="sd">        Extracts and returns the simulation results, including:</span>
+<span class="sd">        - Absolute times (np.ndarray)</span>
+<span class="sd">        - State population history (np.ndarray)</span>
+<span class="sd">        - Interarrival times (np.ndarray)</span>
+<span class="sd">        - The state from which a node transitioned at each event (np.ndarray)</span>
+<span class="sd">        - The state to which a node transitioned at each event (np.ndarray)</span>
+
+<span class="sd">    stop_condition():</span>
+<span class="sd">        Checks if the simulation should terminate based on transition rates or custom stop conditions.</span>
+
+<span class="sd">    plot_results():</span>
+<span class="sd">        Plots the simulation results for either a single run or multiple runs, if applicable.</span>
+
+<span class="sd">    to_yaml(file_path):</span>
+<span class="sd">        Saves the simulation configuration to a YAML file for reproducibility and future use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="kc">None</span> <span class="p">,</span> <span class="n">time_structure_option</span><span class="o">=</span><span class="s1">&#39;Auto&#39;</span><span class="p">,</span>
+                  <span class="n">initial_condition</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;default_percentage&#39;</span><span class="p">:{</span><span class="s1">&#39;inducers&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span><span class="mi">90</span> <span class="p">}},</span>
+                    <span class="n">stop_condition</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;events&#39;</span><span class="p">:</span><span class="mi">1000</span><span class="p">},</span>
+                    <span class="n">nsim</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_structure_option</span><span class="o">=</span><span class="n">time_structure_option</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inst</span><span class="o">=</span><span class="n">inst</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_cfg</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s1">&#39;time_structure_option&#39;</span><span class="p">:</span><span class="n">time_structure_option</span><span class="p">,</span>
+                        <span class="s1">&#39;initial_condition&#39;</span><span class="p">:</span><span class="n">initial_condition</span><span class="p">,</span>
+                        <span class="s1">&#39;stop_condition&#39;</span><span class="p">:</span><span class="n">stop_condition</span><span class="p">,</span>
+                        <span class="s1">&#39;nsim&#39;</span><span class="p">:</span><span class="n">nsim</span>        
+                    <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_generator_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_choose_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_structure_option</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inst</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_cfg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_generator_func</span><span class="p">)</span>
+        
+
+<div class="viewcode-block" id="Simulation.initialize">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.initialize">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">inst</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sim_cfg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time_generator_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yaml</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">yaml</span> <span class="ow">and</span> <span class="n">inst</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">=</span><span class="n">Initialize</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span><span class="n">sim_cfg</span><span class="p">,</span> <span class="n">time_generator_function</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please pass an instant of the model to simulator!&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Simulation.reset">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inst</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_cfg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_generator_func</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span> <span class="nf">_choose_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time_structure</span><span class="p">):</span>
+        <span class="k">if</span>   <span class="n">time_structure</span><span class="o">==</span><span class="s1">&#39;SortedList&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">TimeSorted</span><span class="o">.</span><span class="n">generate_times</span>
+        
+        <span class="k">elif</span> <span class="n">time_structure</span><span class="o">==</span><span class="s1">&#39;Array&#39;</span><span class="p">:</span> <span class="c1">#numpy array</span>
+            <span class="k">return</span> <span class="n">TimeNp</span><span class="o">.</span><span class="n">generate_times</span>
+        
+        <span class="k">elif</span> <span class="n">time_structure</span><span class="o">==</span><span class="s1">&#39;Auto&#39;</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please enter a valid option for time structure:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Array, SortedList, and Auto are only accepted methods&quot;</span><span class="p">)</span>
+
+
+    
+<div class="viewcode-block" id="Simulation.forward">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sample_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">event_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">model_matrices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">rate_arrays</span><span class="p">,</span> 
+                          <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">iteration</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">Tf</span><span class="p">)</span>
+        
+        <span class="n">update_network</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">event_data</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">model_matrices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">rate_arrays</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">networks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">X</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="Simulation.run_signle_time">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.run_signle_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_signle_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_condition</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">()</span>
+        <span class="k">except</span>  <span class="n">StopLoopException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loop terminated: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Simulation.run">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;nsim&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;nsim&#39;</span><span class="p">])):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">run_signle_time</span><span class="p">()</span>  
+                <span class="n">T</span><span class="p">,</span> <span class="n">statecount</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_results</span><span class="p">()</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;T&#39;</span><span class="p">:</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;statecount&#39;</span><span class="p">:</span> <span class="n">statecount</span> <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_signle_time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">=</span><span class="n">results</span>     </div>
+
+
+<div class="viewcode-block" id="Simulation.from_yaml">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.from_yaml">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_yaml</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model_yaml</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">simulation_yaml</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">model_inst</span><span class="o">=</span><span class="n">ModelConfiguration</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">model_yaml</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">simulation_yaml</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">sim_cfg</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span> <span class="n">inst</span><span class="o">=</span><span class="n">model_inst</span><span class="p">,</span>
+                    <span class="n">time_structure_option</span><span class="o">=</span><span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;time_structure_option&#39;</span><span class="p">],</span>
+                    <span class="n">initial_condition</span><span class="o">=</span><span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;initial_condition&#39;</span><span class="p">],</span>
+                    <span class="n">stop_condition</span><span class="o">=</span><span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;stop_condition&#39;</span><span class="p">],</span>
+                    <span class="n">nsim</span><span class="o">=</span><span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;nsim&#39;</span><span class="p">]</span>   <span class="p">)</span></div>
+
+    
+    
+<div class="viewcode-block" id="Simulation.get_results">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.get_results">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">post_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">X0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">model_matrices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">event_data</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">nodes</span> <span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="Simulation.stop_condition">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.stop_condition">[docs]</a>
+    <span class="k">def</span> <span class="nf">stop_condition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">rate_arrays</span><span class="o">.</span><span class="n">R</span> <span class="o">&lt;</span> <span class="mf">1e-6</span> <span class="ow">or</span> 
+                <span class="n">stop_cond</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">)</span>
+                <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Simulation.plot_results">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.plot_results">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span>  <span class="bp">self</span><span class="o">.</span><span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;nsim&#39;</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">T</span><span class="p">,</span> <span class="n">StateCounts</span><span class="p">,</span><span class="o">*</span><span class="n">_</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span> <span class="p">)</span>
+            <span class="n">plot_results</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">StateCounts</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">inst</span><span class="o">.</span><span class="n">compartments</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_cfg</span><span class="p">[</span><span class="s1">&#39;nsim&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">plot_multiple_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst</span><span class="o">.</span><span class="n">compartments</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="Simulation.to_yaml">
+<a class="viewcode-back" href="../../index.html#fastgemf.GEMFsimulation.Simulation.to_yaml">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_cfg</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+</div>
+
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Hossein Samaei.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
