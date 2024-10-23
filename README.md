@@ -159,7 +159,7 @@ The printed result is as:
 ```
 Model: SIR
 Compartments: S, I, R
-Network Layers: ['layer_1']
+Network Layers: ['contact_network']
 Node-Based Transitions: recovery: I --> R (rate: delta)
 Edge-Based Transitions: infection: S --(I)-> I on contact_network (rate: beta)
 ```
