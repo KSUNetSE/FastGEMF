@@ -66,7 +66,8 @@ In the following example, we define a simple SIR model over a single layer conta
 ```python
 import fastgemf as fg
 import networkx as nx
-# to suppress warnings 
+# to suppress warnings
+import warnings
 warnings.filterwarnings('ignore', category=RuntimeWarning)
 
 # Define the SIR model schema
