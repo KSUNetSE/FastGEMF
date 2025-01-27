@@ -56,4 +56,4 @@ def post_population(x0, model_matrices,event_data, nodes  ):
     np.subtract.at(DX, (states_k, np.arange(len(ts))), 1)
     np.add.at(DX, (states_k_plus_1, np.arange(len(ts))), 1)
     StateCount[:, 1:] = np.cumsum(DX, axis=1) + StateCount[:, 0][:, np.newaxis]
-    return time, StateCount[:,:],  ts, states_k, states_k_plus_1
+    return time, StateCount[:,:],  ts,event_data.sampled_nodes, states_k, states_k_plus_1

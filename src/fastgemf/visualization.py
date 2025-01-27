@@ -43,21 +43,24 @@ def extend_to_max_length(data_dict):
 def plot_multiple_results(results,  compartments, font_size=12, font_family='serif', grid=True):
     results, sim_no=extend_to_max_length(results)
 
-    T = list(results.values())[sim_no]['T']
+    #T = list(results.values())[sim_no]['T']
+    T = np.array([result['T'] for result in results.values()])
     state_counts = np.array([result['statecount'] for result in results.values()])
     num_compartments = len(compartments)
     colors = plt.cm.rainbow(np.linspace(0, 1, num_compartments))
-
-    mean_statecount = np.mean(state_counts, axis=0)
-    min_statecount  = np.min(state_counts, axis=0)
-    max_statecount  = np.max(state_counts, axis=0)
+    #mean_statecount = np.mean(state_counts, axis=0)
+    #min_statecount  = np.min(state_counts, axis=0)
+    #max_statecount  = np.max(state_counts, axis=0)
 
     plt.figure(figsize=(10, 6))
+    for i in range(len(results)):
+        for j in range(state_counts.shape[1]):
+            plt.plot(T[i], state_counts[i][j], color=colors[j], alpha=0.3, label=compartments[j] if i == 0 else "")
 
-    for i, compartment in enumerate(compartments):
-        plt.plot(T, mean_statecount[i, :], color=colors[i], 
-                 label=compartment)
-        plt.fill_between(T, min_statecount[i, :], max_statecount[i, :],  color=colors[i], alpha=0.3)
+    #for i, compartment in enumerate(compartments):
+    #    plt.plot(T, mean_statecount[i, :], color=colors[i], 
+    #             label=compartment)
+    #    plt.fill_between(T, min_statecount[i, :], max_statecount[i, :],  color=colors[i], alpha=0.3)
         
 
 
@@ -77,7 +80,7 @@ def draw_model_graph(model):
            for i, compartment in enumerate(model.compartments)}
 
 
-    plt.figure(figsize=(5, 5))
+    plt.figure(figsize=(10, 10))
     G_node = nx.MultiDiGraph()
     for compartment in model.compartments:
         G_node.add_node(compartment)
@@ -111,7 +114,7 @@ def draw_model_graph(model):
     plt.show()
     layers = set(et.network_layer for et in model.edge_transitions)
     for layer in layers:
-        plt.figure(figsize=(6, 5))
+        plt.figure(figsize=(10, 10))
         G_edge = nx.MultiDiGraph()
         for compartment in model.compartments:
             G_edge.add_node(compartment)
