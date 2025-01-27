@@ -14,6 +14,7 @@ def randomly_assign_states(N, states_number,hubs=None):
     states_number : dict
         A dictionary with states as keys and the number of nodes in each state as values.( e.g., {0: 10, 1: 10} , where 0 state is by default susceptible.)
 
+    
     hubs : list of int, optional, default is None
         A list of node with highest degree .
 
@@ -36,16 +37,14 @@ def randomly_assign_states(N, states_number,hubs=None):
     #print(states_number,number)
     if sum(number)>N:
         raise ValueError("The sum of the number of nodes in each state should not exceed the total number of nodes in the network!")
-    if type(hubs) is not np.ndarray and type(hubs) is not list and hubs:
+    if type(hubs) is not np.ndarray and type(hubs) is not list or hubs is None:
         nodes=np.arange(0,N,dtype=int)
         random.shuffle(nodes)
     else:
         nodes=hubs
     index=np.cumsum([0]+number) 
     index=np.array(index)
-    #print(states,index)
     for  i ,state  in enumerate(states):
-        #print(i,state)
         x0[nodes[index[i]:index[i+1]]]=state 
     return np.array(x0,dtype=int)
 def initial_condition_func(networks, inst, initial_condition,counter):
@@ -66,7 +65,9 @@ def initial_condition_func(networks, inst, initial_condition,counter):
         Randomly assigns 10 percent of the population to the inducing state (e.g., 10 percent infected) and the remaining 90 percent equally and randomly to other states (e.g., 90 percent susceptible).
         - 'percentage': {'I': 5, 'S': 95} 
         User-defined percentages for each compartment, assigning nodes randomly to states based on these percentages (e.g., 5 percent infected, 95 percent susceptible).
-        - 'hubs_number': {'I': 10, 'S': 10} 
+        - 'nymber': {'I': 10, 'S': 90} 
+        User-defined number of nodes to be assigned to specific states (e.g., 10 nodes percent infected, 90 nodes percent susceptible).
+        - 'hubs_number': {'I': 10} 
         User-defined number of hubs (nodes with the most connections) to be assigned to specific states.
         - 'exact': x0
         Directly sets the initial state from an existing array `x0`.
@@ -136,6 +137,7 @@ def initial_condition_func(networks, inst, initial_condition,counter):
         """
         return x0.astype(int)
     if method == 'number':
+        x0=np.zeros(networks.nodes)
         N = networks.nodes
         state_numbers={i: int(initial_condition['number'].get(compartment, 0)) for i, compartment in enumerate(inst.compartments)}
         x0=randomly_assign_states(N, state_numbers)
