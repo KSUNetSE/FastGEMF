@@ -13,7 +13,8 @@ from tqdm import tqdm
 from .visualization import  plot_multiple_results,plot_results
 from dataclasses import dataclass, field
 from typing import List, Any, Dict
-
+import warnings
+warnings.filterwarnings('ignore', category=RuntimeWarning)
 
     
 
