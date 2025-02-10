@@ -1,7 +1,6 @@
 
 [![License](https://img.shields.io/github/license/KSUNetSE/FastGEMF?style=plastic)](https://github.com/KSUNetSE/FastGEMF/blob/main/LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/KSUNetSE/FastGEMF?style=plastic&cacheSeconds=60)
-![PyPI Downloads](https://img.shields.io/pypi/dm/FastGEM?style=plastic)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/KSUNetSE/FastGEMF&title=Views&style=plastic)](https://hits.seeyoufarm.com)
 
 
@@ -283,6 +282,7 @@ FastGEMF/
 └── setup.py
 ```
 ## How to cite
+'''
 @ARTICLE{10876117,
   author={Samaei, Mohammad Hossein and Sahneh, Faryad Darabi and Scoglio, Caterina},
   journal={IEEE Access}, 
@@ -293,3 +293,4 @@ FastGEMF/
   pages={1-1},
   keywords={Stochastic processes;Epidemics;Nonhomogeneous media;Computational modeling;Analytical models;Scalability;Python;Complexity theory;Accuracy;Solid modeling;Complex networks;Markov process;Epidemic spreading;Mechanistic models;Simulation},
   doi={10.1109/ACCESS.2025.3539345}}
+  '''
