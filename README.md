@@ -1,7 +1,7 @@
 
 [![License](https://img.shields.io/github/license/KSUNetSE/FastGEMF?style=plastic)](https://github.com/KSUNetSE/FastGEMF/blob/main/LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/KSUNetSE/FastGEMF?style=plastic&cacheSeconds=60)
-![GitHub All Releases](https://img.shields.io/github/downloads/KSUNetSE/FastGEMF/total?style=plastic&cacheSeconds=60)
+![PyPI Downloads](https://img.shields.io/pypi/dm/FastGEM?style=plastic)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/KSUNetSE/FastGEMF&title=Views&style=plastic)](https://hits.seeyoufarm.com)
 
 
