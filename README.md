@@ -1,8 +1,9 @@
 
-[![License](https://img.shields.io/github/license/MrNeo01/Practice?style=plastic)](https://github.com/MrNeo01/Practice/blob/main/LICENSE)
-![GitHub last commit](https://img.shields.io/github/last-commit/MrNeo01/Practice?style=plastic?cacheSeconds=60)
-![GitHub All Releases](https://img.shields.io/github/downloads/MrNeo01/Practice/total?style=plastic?cacheSeconds=60)
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/MrNeo01/Practice&title=Views&style=plastic)](https://hits.seeyoufarm.com)
+[![License](https://img.shields.io/github/license/KSUNetSE/FastGEMF?style=plastic)](https://github.com/KSUNetSE/FastGEMF/blob/main/LICENSE)
+![GitHub last commit](https://img.shields.io/github/last-commit/KSUNetSE/FastGEMF?style=plastic&cacheSeconds=60)
+![GitHub All Releases](https://img.shields.io/github/downloads/KSUNetSE/FastGEMF/total?style=plastic&cacheSeconds=60)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/KSUNetSE/FastGEMF&title=Views&style=plastic)](https://hits.seeyoufarm.com)
+
 
 
 <div align="center">
