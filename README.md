@@ -282,7 +282,7 @@ FastGEMF/
 └── setup.py
 ```
 ## How to cite
-'''
+```
 @ARTICLE{10876117,
   author={Samaei, Mohammad Hossein and Sahneh, Faryad Darabi and Scoglio, Caterina},
   journal={IEEE Access}, 
@@ -293,4 +293,4 @@ FastGEMF/
   pages={1-1},
   keywords={Stochastic processes;Epidemics;Nonhomogeneous media;Computational modeling;Analytical models;Scalability;Python;Complexity theory;Accuracy;Solid modeling;Complex networks;Markov process;Epidemic spreading;Mechanistic models;Simulation},
   doi={10.1109/ACCESS.2025.3539345}}
-  '''
+  ```
