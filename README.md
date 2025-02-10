@@ -19,12 +19,12 @@ FastGEMF is scalabe  spread process simulator  for small to large scale multi-la
 
 ## Table of Contents
 
-- [Features]
-- [Installation]
-- [Quick implementation]
-- [Usage]
-- [Repository Structure]
-- [How To Cite]
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Implementation](#quick-implementation)
+- [Usage](#usage)
+- [Repository Structure](#repository-structure)
+- [How To Cite](#how-to-cite)
 
 ## Features 
 - Fast and efficient event based simulator( logarithmic time complexity w.r.t. number of nodes in networks).
@@ -282,4 +282,14 @@ FastGEMF/
 ├── setup.cfg                  
 └── setup.py
 ```
-## Citation
+## How to cite
+@ARTICLE{10876117,
+  author={Samaei, Mohammad Hossein and Sahneh, Faryad Darabi and Scoglio, Caterina},
+  journal={IEEE Access}, 
+  title={FastGEMF: Scalable High-Speed Simulation of Stochastic Spreading Processes Over Complex Multilayer Networks}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1-1},
+  keywords={Stochastic processes;Epidemics;Nonhomogeneous media;Computational modeling;Analytical models;Scalability;Python;Complexity theory;Accuracy;Solid modeling;Complex networks;Markov process;Epidemic spreading;Mechanistic models;Simulation},
+  doi={10.1109/ACCESS.2025.3539345}}
