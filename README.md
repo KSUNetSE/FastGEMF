@@ -12,7 +12,7 @@
 </div>
 
 
-FastGEMF is scalabe  spread process simulator  for small to large scale multi-layer complex networks. You can define mechanistic model with mutiple infleuncer through simple steps and simualte the difussion process over networks.
+FastGEMF is scalable  spread process simulator  for small to large-scale multi-layer complex networks. You can define mechanistic model with mutiple infleuncer through simple steps and simualte the difussion process over networks.
 
 
 
@@ -40,7 +40,7 @@ To install FastGEMF from the Python Package Index (PyPI), execute the following 
 ```sh
 python3 -m pip install fastgemf --user --upgrade
 ```
-Using the Source Code Repository
+Using the Source Code Repository: 
 If you prefer to install the latest version directly from the source, you can use pip to install FastGEMF from GitHub:
 
 ```sh
@@ -48,8 +48,6 @@ python3 -m pip install https://github.com/KSUNetse/FastGEMF/archive/main.zip --u
 ```
 Alternatively, you can clone the repository and install FastGEMF locally:
 
-bash
-Copy code
 ```sh
 git clone https://github.com/KSUNetse/FastGEMF.git
 cd FastGEMF
@@ -164,7 +162,7 @@ Network Layers: ['contact_network']
 Node-Based Transitions: recovery: I --> R (rate: delta)
 Edge-Based Transitions: infection: S --(I)-> I on contact_network (rate: beta)
 ```
-In the next step, we use `ModelConfiguration` module to assign values to the parameters of the model instane we defined(If you want to save to YAML make sure you have loaded the directories for networks):
+In the next step, we use the `ModelConfiguration` module to assign values to the parameters of the model instane we defined(If you want to save to YAML make sure you have loaded the directories for networks):
 ```python
 SIR_instnace=(fg.ModelConfiguration(SIR_model)
 .add_parameter(beta=.05,delta=.05) # set the defined parameters to numeric values
@@ -284,13 +282,14 @@ FastGEMF/
 ## How to cite
 ```
 @ARTICLE{10876117,
-  author={Samaei, Mohammad Hossein and Sahneh, Faryad Darabi and Scoglio, Caterina},
+  author={Hossein Samaei, Mohammad and Darabi Sahneh, Faryad and Scoglio, Caterina},
   journal={IEEE Access}, 
   title={FastGEMF: Scalable High-Speed Simulation of Stochastic Spreading Processes Over Complex Multilayer Networks}, 
   year={2025},
-  volume={},
+  volume={13},
   number={},
-  pages={1-1},
-  keywords={Stochastic processes;Epidemics;Nonhomogeneous media;Computational modeling;Analytical models;Scalability;Python;Complexity theory;Accuracy;Solid modeling;Complex networks;Markov process;Epidemic spreading;Mechanistic models;Simulation},
+  pages={27112-27125},
+  keywords={Stochastic processes;Epidemics;Nonhomogeneous media;Computational modeling;Analytical models;Scalability;Python;Complexity theory;Accuracy;Solid modeling;Complex networks;Markov process;epidemic spreading;mechanistic models;simulation},
   doi={10.1109/ACCESS.2025.3539345}}
+
   ```
