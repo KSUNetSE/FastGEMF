@@ -65,7 +65,7 @@ def initial_condition_func(networks, inst, initial_condition,counter):
         Randomly assigns 10 percent of the population to the inducing state (e.g., 10 percent infected) and the remaining 90 percent equally and randomly to other states (e.g., 90 percent susceptible).
         - 'percentage': {'I': 5, 'S': 95} 
         User-defined percentages for each compartment, assigning nodes randomly to states based on these percentages (e.g., 5 percent infected, 95 percent susceptible).
-        - 'nymber': {'I': 10, 'S': 90} 
+        - 'number': {'I': 10, 'S': 90} 
         User-defined number of nodes to be assigned to specific states (e.g., 10 nodes percent infected, 90 nodes percent susceptible).
         - 'hubs_number': {'I': 10} 
         User-defined number of hubs (nodes with the most connections) to be assigned to specific states.

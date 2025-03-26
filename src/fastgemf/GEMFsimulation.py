@@ -194,12 +194,12 @@ class Simulation:
                 stop_cond(self.setup)
                 )
     
-    def plot_results(self):
+    def plot_results(self,**kwargs):
         if  self.sim_cfg['nsim']<2:
             T, StateCounts,*_ =self.get_results( )
-            plot_results(T,StateCounts,self.inst.compartments)
+            plot_results(T,StateCounts,self.inst.compartments, **kwargs)
         elif self.sim_cfg['nsim']>=2:
-            plot_multiple_results(self.results, self.inst.compartments)
+            plot_multiple_results(self.results, self.inst.compartments, **kwargs)
     
 
     def to_yaml(self, file_path: str):

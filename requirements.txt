@@ -1,5 +1,7 @@
 numpy                         
-pandas                        
+pandas
+pyyaml
+json                        
 networkx                      
 matplotlib                    
 tqdm                          
