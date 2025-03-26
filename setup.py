@@ -3,7 +3,7 @@ import os
 
 def read_requirements():
     """Read the requirements.txt file and return a list of dependencies"""
-    with open('requirements.txt') as req:
+    with open('requirements.txt','r') as req:
         return req.read().splitlines()
 
 setup(
