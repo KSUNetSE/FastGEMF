@@ -1,7 +1,7 @@
 
 [![License](https://img.shields.io/github/license/KSUNetSE/FastGEMF?style=plastic)](https://github.com/KSUNetSE/FastGEMF/blob/main/LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/KSUNetSE/FastGEMF?style=plastic&cacheSeconds=60)
-
+[![PyPI Downloads](https://static.pepy.tech/badge/fastgemf)](https://pepy.tech/projects/fastgemf)
 
 <div align="center">
   <h1> FastGEMF</h1>
