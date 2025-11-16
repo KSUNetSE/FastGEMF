@@ -5,7 +5,7 @@ from os.path import join as ospj
 # to suppress warnings
 import warnings
 warnings.filterwarnings('ignore', category=RuntimeWarning)
-
+print(f"fastgemf version: {fg.__version__}")
 # Define the SIR model schema
 sir_model = (
     fg.ModelSchema("SIS")
