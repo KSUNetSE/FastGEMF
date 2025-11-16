@@ -11,6 +11,7 @@ import matplotlib
 from scipy.interpolate import interp1d
 from os.path import join as ospj
 import os
+from typing import Literal  
 matplotlib.rcParams['backend'] = 'Agg'  # Default to Agg
 if 'matplotlib.backends' in sys.modules:
     import importlib
@@ -50,21 +51,28 @@ matplotlib.use(backend, force=True)
 
 
 def plot_results(T, StateCount, compartments, line_styles=['-', '--', ':'], 
-                font_size=12, font_family='serif',show_figure=True,save_figure=True,save_path= ospj(os.getcwd(),"results_figure.pdf"),y_axis="fraction",
+                font_size=12,
+                font_family='serif',
+                show_figure=True,
+                save_figure=True,
+                title="",
+                save_path= ospj(os.getcwd(),"results_figure.pdf"),
+                y_axis="fraction",
                 grid=True):
+    title= title if title is not "" else "State Count Over Time"
     plt.figure(figsize=(10, 6))
     num_compartments = len(compartments)
     colors = plt.cm.rainbow(np.linspace(0, 1, num_compartments))
+    N=int( np.sum(StateCount[:,0],axis=0))
     if y_axis=="fraction":
-        N=int( np.sum(StateCount[:,0],axis=0))
         StateCount=StateCount/N        
     for i, compartment in enumerate(compartments):
         plt.plot(T, StateCount[i, :], color=colors[i], 
                  label=compartment)
     
     plt.xlabel('Time', fontsize=font_size, fontfamily=font_family)
-    plt.ylabel(f'{y_axis } of states', fontsize=font_size, fontfamily=font_family)
-    plt.title('State Count Over Time', fontsize=font_size+2, fontfamily=font_family)
+    plt.ylabel(f'{y_axis } of states (Number of Nodes: {N})', fontsize=font_size, fontfamily=font_family)
+    plt.title(title, fontsize=font_size+2, fontfamily=font_family)
     plt.legend(fontsize=font_size-2)
     plt.grid(grid)
     plt.tight_layout()
@@ -95,14 +103,14 @@ def extend_to_max_length(data_dict):
 
     return data_dict, sim_no
 
-def plot_multiple_results(results,  compartments, font_size=12, font_family='serif',show_figure=False,save_figure=True,
+def plot_minmax_results(results,  compartments, font_size=12, font_family='serif',show_figure=False,save_figure=True, title="",
                           save_path= ospj(os.getcwd(),"simulation_figure.pdf"),grid=True,y_axis="fraction"):#y_axis="population"
     
     
     T = [np.array(result['T']) for result in results.values()]
     state_counts = [np.array(result['statecount']) for result in results.values()]
     num_compartments = len(compartments)
-
+    title= title+"\n(Solid = Mean, Shaded = Min-Max Shading)" if title is not "" else "State Count Over Time\n(Solid = Mean, Shaded = Min-Max Shading)"
     colors = plt.cm.rainbow(np.linspace(0, 1, num_compartments))
 
     # determine the common time grid based on the longest simulation
@@ -147,7 +155,7 @@ def plot_multiple_results(results,  compartments, font_size=12, font_family='ser
             common_time,
             mean_state_counts[j, :],
             color=colors[j],
-            lw=.3,  # thick line for mean
+            lw=.5,  # thick line for mean
             alpha=1,    
             
         )
@@ -156,13 +164,14 @@ def plot_multiple_results(results,  compartments, font_size=12, font_family='ser
             min_state_counts[j, :],
             max_state_counts[j, :],
             color=colors[j],
-            label=f"{compartments[j]} (- Mean)",
+            label=f"{compartments[j]}",
             alpha=0.3,
             #=f"{compartments[j]} (Mean-Max)"
         )
     grid and plt.grid(True)
+    plt.title(title, fontsize=font_size+2, fontfamily= font_family)
     plt.xlabel('Time', fontsize=font_size, fontfamily=font_family)
-    plt.ylabel(f'{y_axis } of States', fontsize=font_size, fontfamily=font_family)
+    plt.ylabel(f'{y_axis } of States (Number of Nodes: {N})', fontsize=font_size, fontfamily=font_family)
     plt.legend(fontsize=font_size)
     if save_figure:
         plt.savefig(save_path, dpi=600, bbox_inches='tight')
@@ -172,6 +181,89 @@ def plot_multiple_results(results,  compartments, font_size=12, font_family='ser
         print("Warning: Interactive display not available with current backend. you can save the figure insted, just pass kwarg: save_figure:True, and save_path:your\path\here ")
     elif show_figure and save_figure:
         print("Warning: Interactive display not available with current backend. Figure saved instead at directory: ",save_path)
+        
+
+def plot_shaded_results(
+        times,
+        mean_statecounts,
+        statecounts_variations,
+        compartments,
+        variation_type="range",
+        font_size=12,
+        font_family='serif',
+        show_figure=False,
+        save_figure=True,
+        save_path=None,
+        title="",
+        grid=True,
+        y_axis="fraction"
+    ):
+
+
+    plt.figure(figsize=(10, 6), dpi=300)
+
+    if variation_type == "iqr":
+        variation_label = "IQR (25–75%)"
+    elif variation_type == "90ci":
+        variation_label = "90% CI (5–95%)"
+    elif variation_type == "std":
+        variation_label = "Mean ± 1 STD"
+    elif variation_type == "range":
+        variation_label = "Range (Min–Max)"
+    else:
+        variation_label = ""
+
+    if title.strip() == "":
+        title = f"State Count Over Time\n(Solid = Mean, Shaded = {variation_label})"
+    else:
+        title = f"{title}\n(Solid = Mean, Shaded = {variation_label})"
+
+    if save_path is None:
+        save_path = ospj(os.getcwd(), "simulation_figure.pdf")
+
+    num_compartments = len(compartments)
+    N = int(np.sum(mean_statecounts, axis=0)[0])
+
+    colors = plt.cm.rainbow(np.linspace(0, 1, num_compartments))
+
+    for i, compartment in enumerate(compartments):
+
+        mean = mean_statecounts[i, :]
+        lower = statecounts_variations[0, i, :]
+        upper = statecounts_variations[1, i, :]
+
+        if y_axis == "fraction":
+            mean = mean / N
+            lower = lower / N
+            upper = upper / N
+
+        plt.plot(times, mean, color=colors[i], label=f"{compartment}")
+
+        plt.fill_between(times, lower, upper, color=colors[i], alpha=0.3)
+
+    if grid:
+        plt.grid(True)
+
+    plt.xlabel('Time', fontsize=font_size, fontfamily=font_family)
+    plt.ylabel(f'{y_axis} of States (Number of Nodes: {N})',
+               fontsize=font_size, fontfamily=font_family)
+
+    plt.title(title, fontsize=font_size + 2, fontfamily=font_family)
+    plt.legend(fontsize=font_size - 2)
+    
+    
+    if save_figure:
+        plt.savefig(save_path, dpi=600, bbox_inches='tight')
+    if show_figure and matplotlib.get_backend() == 'TkAgg':
+        plt.show(block=True)
+    elif show_figure and  not save_figure:
+        print("Warning: Interactive display not available with current backend. you can save the figure insted, just pass kwarg: save_figure:True, and save_path:your\path\here ")
+    elif show_figure and save_figure:
+        print("Warning: Interactive display not available with current backend. Figure saved instead at directory: ",save_path)
+    
+    
+    
+    
 def draw_model_graph(model):
     N = len(model.compartments)
     angle = 2*np.pi / N

@@ -1,8 +1,9 @@
 import numpy  as np
+import pandas
 import yaml 
 from .error import StopLoopException 
 from .times_structure import TimeSorted,TimeNp
-from .post_population import post_population
+from .post_population import post_population, final_results_stats
 from .initializer import Initialize
 from .modelconfiguration import ModelConfiguration
 from .GEMFcore import sample_event, update_network
@@ -10,7 +11,8 @@ from .stop_conditions import stop_cond
 import scipy.sparse as sp
 import copy as copy
 from tqdm import tqdm
-from .visualization import  plot_multiple_results,plot_results
+from typing import Literal, Dict, Tuple, Optional, Any
+from .visualization import  plot_shaded_results,plot_results
 from dataclasses import dataclass, field
 from typing import List, Any, Dict
 import warnings
@@ -115,7 +117,7 @@ class Simulation:
         self.setup=None
         self.counter=np.array([0])
         self.initialize(self.inst,self.sim_cfg, self.time_generator_func)
-        
+        self.results={}
 
     def initialize(self,inst=None, sim_cfg=None, time_generator_function=None, yaml=None):
         if not yaml and inst:
@@ -165,11 +167,13 @@ class Simulation:
         if self.sim_cfg['nsim'] > 1:
             for i in tqdm(range(self.sim_cfg['nsim'])):
                 self.run_signle_time()  
-                T, statecount, *_=self.get_results()
+                T, statecount, *_=post_population(self.setup.X0, self.setup.model_matrices, self.setup.event_data,
+                                self.setup.networks.nodes )
                 results[i]={'T':T, 'statecount': statecount }
+                self.results=results 
         else:
             self.run_signle_time()
-        self.results=results     
+            
 
     @classmethod
     def from_yaml(cls, model_yaml: str, simulation_yaml: str):
@@ -185,25 +189,72 @@ class Simulation:
                     nsim=sim_cfg['nsim']   )
     
     
-    def get_results(self):
-        return post_population(self.setup.X0, self.setup.model_matrices, self.setup.event_data,
-                                self.setup.networks.nodes )
+    def get_results(self,variation_type: Literal["iqr", "90ci", "std", "range"] = "range",full_result:bool=False) -> Any:
+        """_summary_
+
+        Args:
+            variation_type (Literal[&quot;iqr&quot;, &quot;90ci&quot;, &quot;std&quot;, &quot;range&quot;], optional): _description_. Defaults to "range".
+            full_result (bool, optional): _description_. Defaults to False.
+
+        Returns:
+            Any: based on the number of simulations and full_result flag:
+            - If nsim &gt; 1 and full_result is False:
+                - times: np.ndarray
+                - statecounts_mean: np.ndarray
+                - statecounts_variations: np.ndarray
+            - If nsim &gt; 1 and full_result is True:
+                - results: dict
+            - If nsim &lt; 2 and full_result is False:
+                - times: np.ndarray 
+                - StateCounts: np.ndarray
+            - If nsim &lt; 2 and full_result is True:
+                - times: np.ndarray
+                - StateCounts: np.ndarray   
+                - ts: np.ndarray
+                - sampled_nodes: np.ndarray
+                - states_k: np.ndarray  
+                - states_k_plus_1: np.ndarray
+                
+        """
+        if self.sim_cfg['nsim']>1 and not full_result:
+            times={i:self.results[i]['T'] for i in self.results.keys()}
+            statecounts={i:self.results[i]['statecount'] for i in self.results.keys()}
+            number_of_compartments=self.setup.model_matrices.M
+            times_common, statecounts_mean, statecounts_variations,*_=final_results_stats(times, statecounts, number_of_compartments, variation_type=variation_type)
+            
+            return times_common, statecounts_mean, statecounts_variations
         
+        elif self.sim_cfg['nsim']>1 and full_result:
+            return self.results
+        
+        if self.sim_cfg['nsim']<2 and  not full_result: 
+            times, StateCounts,*_=post_population(self.setup.X0, self.setup.model_matrices, self.setup.event_data,
+                                self.setup.networks.nodes )
+            return times, StateCounts
+        elif self.sim_cfg['nsim']<2 and full_result:
+            times, StateCounts,  ts, sampled_nodes, states_k, states_k_plus_1=post_population(self.setup.X0, self.setup.model_matrices, self.setup.event_data,
+                                self.setup.networks.nodes )
+            return times, StateCounts, ts, sampled_nodes, states_k, states_k_plus_1
+
+
     def stop_condition(self):
         return (self.setup.rate_arrays.R < 1e-6 or 
                 stop_cond(self.setup)
                 )
-    
-    def plot_results(self,**kwargs):
+
+    def plot_results(self,times:Optional[np.ndarray]=None,statecounts:Optional[np.ndarray]=None,statecounts_variations:Optional[np.ndarray]=None,variation_type: Literal["iqr", "90ci", "std", "range"] = "range",**kwargs):
         if  self.sim_cfg['nsim']<2:
-            T, StateCounts,*_ =self.get_results( )
-            plot_results(T,StateCounts,self.inst.compartments, **kwargs)
+            if times is None or statecounts is None:
+                times, statecounts, *_ = self.get_results()
+            plot_results(times,statecounts,self.inst.compartments, **kwargs)
+            
         elif self.sim_cfg['nsim']>=2:
-            plot_multiple_results(self.results, self.inst.compartments, **kwargs)
-    
+            if times is None or statecounts is None or statecounts_variations is None:
+                times_common, statecounts_mean, statecounts_variations= self.get_results( variation_type=variation_type)
+                plot_shaded_results(times_common,statecounts_mean,statecounts_variations,self.inst.compartments, variation_type=variation_type, **kwargs)
+            plot_shaded_results(times,statecounts,statecounts_variations,self.inst.compartments, variation_type=variation_type, **kwargs)
 
     def to_yaml(self, file_path: str):
         with open(file_path, 'w') as file:
             yaml.dump(self.sim_cfg, file, default_flow_style=False)
 
-    
