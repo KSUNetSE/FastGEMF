@@ -1,5 +1,5 @@
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 r"""
 FastGEMF: Scalable High-Speed Simulation of Stochastic Spreading Processes over Complex Multilayer Networks
