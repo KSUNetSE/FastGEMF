@@ -1,17 +1,14 @@
 from setuptools import setup, find_packages
 import os
 
-def read_requirements():
-    """Read the requirements.txt file and return a list of dependencies"""
-    with open('requirements.txt','r') as req:
-        return req.read().splitlines()
+install_requires = []
 
 setup(
     name='FastGEMF',
     version='0.1.3',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
-    install_requires=read_requirements(),
+    install_requires=[],
     author='Mohammad Hossein Samaei, Faryad Darabi Sahneh, Caterina Scoglio',
     author_email='msamaei@ksu.edu',
     description='Fast Scalabe Spread Process Simulator Over Large Scale Complex Multi-Layer Networks',
