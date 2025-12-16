@@ -4,9 +4,8 @@
 [![PyPI Downloads](https://static.pepy.tech/badge/fastgemf)](https://pepy.tech/projects/fastgemf)
 
 <div align="center">
-  <h1> FastGEMF</h1>
-  <h1> Scalable High-Speed Simulation of Stochastic Spreading Processes over Complex Multilayer Networks</h1>
- <p><img src="images/logo2.jpg" alt="Alt text" width="450"/> </p>
+    <p><img src="images/logo2.jpg" alt="Alt text" width="650"/> </p>
+    <h1> Scalable High-Speed Simulation of Stochastic Spreading Processes over Complex Multilayer Networks</h1>
 </div>
 
 
