@@ -246,13 +246,16 @@ class Simulation:
         if  self.sim_cfg['nsim']<2:
             if times is None or statecounts is None:
                 times, statecounts, *_ = self.get_results()
-            plot_results(times,statecounts,self.inst.compartments, **kwargs)
+                plot_results(times,statecounts,self.inst.compartments, **kwargs)
+            elif times is not None and statecounts is not None:
+                plot_results(times,statecounts,self.inst.compartments, **kwargs)
             
         elif self.sim_cfg['nsim']>=2:
             if times is None or statecounts is None or statecounts_variations is None:
                 times_common, statecounts_mean, statecounts_variations= self.get_results( variation_type=variation_type)
                 plot_shaded_results(times_common,statecounts_mean,statecounts_variations,self.inst.compartments, variation_type=variation_type, **kwargs)
-            plot_shaded_results(times,statecounts,statecounts_variations,self.inst.compartments, variation_type=variation_type, **kwargs)
+            elif times is not None and statecounts is not None and statecounts_variations is not None:
+                plot_shaded_results(times,statecounts,statecounts_variations,self.inst.compartments, variation_type=variation_type, **kwargs)
 
     def to_yaml(self, file_path: str):
         with open(file_path, 'w') as file:
